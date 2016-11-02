@@ -80,7 +80,59 @@ redink()
   });
 ```
 
-The end.
+Then, various queries and mutations are available for each defined schema.
+
+```js
+{
+  user(id: "1") {
+    id
+    name
+    blogs {
+      id
+      title
+      author {
+        id
+        name
+      }
+    }
+  }
+}
+
+{
+  users {
+    id
+    name
+    blogs {
+      ...
+    }
+  }
+}
+
+mutation {
+  createUser(input: {
+    name: "Bob"
+  }) {
+    id
+    name
+  }
+}
+
+mutation {
+  updateUser(id: "1", input: {
+    name: "Billy"
+  }) {
+    id
+    name
+  }
+}
+
+mutation {
+  archiveUser(id: "1") {
+    id
+    name
+  }
+}
+```
 
 ## Todo
 - [ ] Add ability to inject custom hooks into `resolve` methods
