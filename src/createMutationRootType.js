@@ -39,6 +39,21 @@ export default (schemas, types) => new GraphQLObjectType({
             .then(flattenAttributes);
         },
       },
+
+      // archive an existing resource
+      [`archive${titleizeType(curr)}`]: {
+        type: types[curr],
+        args: {
+          id: { type: new GraphQLNonNull(GraphQLID) },
+        },
+        resolve(root, args, ctx) {
+          ensureContextHasModel(ctx);
+          return ctx.model(curr)
+            .fetchResource(args.id)
+            .then(resource => resource.archive())
+            .then(flattenAttributes);
+        },
+      },
     };
   }, {}),
 });
