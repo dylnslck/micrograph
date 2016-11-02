@@ -1,0 +1,43 @@
+{
+  "name": "redink-graphql",
+  "version": "0.0.1-alpha.0",
+  "description": "GraphQL utilities for Redink",
+  "repository": "directlyio/redink-graphql",
+  "main": "index.js",
+  "author": "Dylan Slack <dylanslack@gmail.com> (http://www.dylanslack.me)",
+  "license": "MIT",
+  "scripts": {
+    "test": "ava"
+  },
+  "dependencies": {
+    "graphql": "^0.7.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.16.0",
+    "babel-eslint": "^6.1.2",
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "eslint": "^3.0.1",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-plugin-import": "^1.10.3",
+    "eslint-plugin-jsx-a11y": "^2.0.1",
+    "eslint-plugin-react": "^5.2.2",
+    "express": "^4.14.0",
+    "express-graphql": "^0.5.4",
+    "redink": "^2.0.0-beta.24",
+    "redink-schema": "0.0.3"
+  },
+  "ava": {
+    "files": [
+      "test"
+    ],
+    "source": [
+      "src/**/*.{js}",
+      "!dist/**/*"
+    ],
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
+  }
+}
