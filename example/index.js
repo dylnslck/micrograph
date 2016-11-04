@@ -37,7 +37,7 @@ const app = express();
 
 redink().connect({
   schemas,
-  host: process.env.RETHINKDB_HOST,
+  host: '107.170.131.151',
   verbose: true,
   db: 'test',
 }).then(() => {

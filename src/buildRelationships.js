@@ -1,6 +1,7 @@
-import { GraphQLList } from 'graphql';
+import buildConnectionType from './buildConnectionType';
 import ensureContextHasModel from './ensureContextHasModel';
 import flattenAttributes from './flattenAttributes';
+import flattenConnection from './flattenConnection';
 
 export default (schemas, name, types) => {
   if (!schemas[name]) {
@@ -25,10 +26,10 @@ export default (schemas, name, types) => {
 
         return ctx.model(type)
           .findRelated(parent.id, field)
-          .then(resources => resources.map(flattenAttributes));
+          .then(flattenConnection);
       };
 
-      graphQLType = new GraphQLList(types[typeString]);
+      graphQLType = buildConnectionType(curr, types[typeString]);
     } else {
       resolve = (parent, args, ctx) => {
         ensureContextHasModel(ctx);

@@ -34,7 +34,7 @@ export default (schemas, types) => new GraphQLObjectType({
         resolve(root, args, ctx) {
           ensureContextHasModel(ctx);
           return ctx.model(curr)
-            .fetchResource(args.id)
+            .fetch(args.id)
             .then(resource => resource.update(args.input))
             .then(flattenAttributes);
         },
@@ -49,7 +49,7 @@ export default (schemas, types) => new GraphQLObjectType({
         resolve(root, args, ctx) {
           ensureContextHasModel(ctx);
           return ctx.model(curr)
-            .fetchResource(args.id)
+            .fetch(args.id)
             .then(resource => resource.archive())
             .then(flattenAttributes);
         },

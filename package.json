@@ -7,7 +7,14 @@
   "author": "Dylan Slack <dylanslack@gmail.com> (http://www.dylanslack.me)",
   "license": "MIT",
   "scripts": {
-    "test": "ava"
+    "build": "npm run clean && mkdirp dist && babel src --out-dir dist",
+    "docs": "babel-node documentation",
+    "clean": "rimraf dist coverage .nyc_output",
+    "cover": "npm run clean && nyc ava && nyc report --reporter=html && open -a \"Google Chrome\" coverage/index.html",
+    "test": "npm run test:lint && npm run test:src",
+    "test:lint": "eslint src test",
+    "test:src": "nyc ava && nyc report --reporter=lcov",
+    "prepublish": "npm run build"
   },
   "dependencies": {
     "graphql": "^0.7.2"
@@ -24,7 +31,7 @@
     "eslint-plugin-react": "^5.2.2",
     "express": "^4.14.0",
     "express-graphql": "^0.5.4",
-    "redink": "^2.0.0-beta.24",
+    "redink": "next",
     "redink-schema": "0.0.3"
   },
   "ava": {

@@ -2,11 +2,34 @@ import {
   GraphQLObjectType,
   GraphQLNonNull,
   GraphQLID,
-  GraphQLList,
+  GraphQLInt,
+  GraphQLString,
+  GraphQLInputObjectType,
 } from 'graphql';
 
+import buildConnectionType from './buildConnectionType';
 import ensureContextHasModel from './ensureContextHasModel';
 import flattenAttributes from './flattenAttributes';
+import flattenConnection from './flattenConnection';
+import titleizeType from './titleizeType';
+
+const OptionsInputType = new GraphQLInputObjectType({
+  name: 'OptionsInput',
+  fields: {
+    page: {
+      type: new GraphQLInputObjectType({
+        name: 'PaginationInput',
+        description: 'Four fields used for bidirectional pagination.',
+        fields: {
+          first: { type: GraphQLInt },
+          last: { type: GraphQLInt },
+          after: { type: GraphQLString },
+          before: { type: GraphQLString },
+        },
+      }),
+    },
+  },
+});
 
 export default (schemas, types) => new GraphQLObjectType({
   name: 'Query',
@@ -29,28 +52,32 @@ export default (schemas, types) => new GraphQLObjectType({
     }
 
     const { inflection } = meta;
+    const ConnectionType = buildConnectionType(curr, types[curr]);
 
     return {
       ...prev,
 
       // retrieve a single record
-      [curr]: {
+      [`fetch${titleizeType(curr)}`]: {
         type: types[curr],
         args: {
           id: { type: new GraphQLNonNull(GraphQLID) },
         },
         resolve(root, args, ctx) {
           ensureContextHasModel(ctx);
-          return ctx.model(curr).fetchResource(args.id).then(flattenAttributes);
+          return ctx.model(curr).fetch(args.id).then(flattenAttributes);
         },
       },
 
       // retrieve many records
-      [inflection]: {
-        type: new GraphQLList(types[curr]),
+      [`find${titleizeType(inflection)}`]: {
+        type: ConnectionType,
+        args: {
+          options: { type: OptionsInputType },
+        },
         resolve(root, args, ctx) {
           ensureContextHasModel(ctx);
-          return ctx.model(curr).find().then(resources => resources.map(flattenAttributes));
+          return ctx.model(curr).find(args.options).then(flattenConnection);
         },
       },
     };
