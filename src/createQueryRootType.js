@@ -2,34 +2,14 @@ import {
   GraphQLObjectType,
   GraphQLNonNull,
   GraphQLID,
-  GraphQLInt,
-  GraphQLString,
-  GraphQLInputObjectType,
 } from 'graphql';
 
 import buildConnectionType from './buildConnectionType';
 import ensureContextHasModel from './ensureContextHasModel';
 import flattenAttributes from './flattenAttributes';
 import flattenConnection from './flattenConnection';
+import optionsInputType from './optionsInputType';
 import titleizeType from './titleizeType';
-
-const OptionsInputType = new GraphQLInputObjectType({
-  name: 'OptionsInput',
-  fields: {
-    page: {
-      type: new GraphQLInputObjectType({
-        name: 'PaginationInput',
-        description: 'Four fields used for bidirectional pagination.',
-        fields: {
-          first: { type: GraphQLInt },
-          last: { type: GraphQLInt },
-          after: { type: GraphQLString },
-          before: { type: GraphQLString },
-        },
-      }),
-    },
-  },
-});
 
 export default (schemas, types) => new GraphQLObjectType({
   name: 'Query',
@@ -73,7 +53,7 @@ export default (schemas, types) => new GraphQLObjectType({
       [`find${titleizeType(inflection)}`]: {
         type: ConnectionType,
         args: {
-          options: { type: OptionsInputType },
+          options: { type: optionsInputType },
         },
         resolve(root, args, ctx) {
           ensureContextHasModel(ctx);

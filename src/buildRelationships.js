@@ -2,6 +2,7 @@ import buildConnectionType from './buildConnectionType';
 import ensureContextHasModel from './ensureContextHasModel';
 import flattenAttributes from './flattenAttributes';
 import flattenConnection from './flattenConnection';
+import optionsInputType from './optionsInputType';
 
 export default (schemas, name, types) => {
   if (!schemas[name]) {
@@ -17,36 +18,36 @@ export default (schemas, name, types) => {
     const typeString = relationships[curr].type;
     const { field, relation } = relationships[curr];
 
-    let resolve;
-    let graphQLType;
-
     if (relation === 'hasMany') {
-      resolve = (parent, args, ctx) => {
-        ensureContextHasModel(ctx);
+      return {
+        ...prev,
+        [curr]: {
+          type: buildConnectionType(curr, types[typeString]),
+          args: {
+            options: { type: optionsInputType },
+          },
+          resolve(parent, args, ctx) {
+            ensureContextHasModel(ctx);
 
-        return ctx.model(type)
-          .findRelated(parent.id, field)
-          .then(flattenConnection);
+            return ctx.model(type)
+              .findRelated(parent.id, field, args.options)
+              .then(flattenConnection);
+          },
+        },
       };
-
-      graphQLType = buildConnectionType(curr, types[typeString]);
-    } else {
-      resolve = (parent, args, ctx) => {
-        ensureContextHasModel(ctx);
-
-        return ctx.model(type)
-          .findRelated(parent.id, field)
-          .then(flattenAttributes);
-      };
-
-      graphQLType = types[typeString];
     }
 
     return {
       ...prev,
       [curr]: {
-        type: graphQLType,
-        resolve,
+        type: types[typeString],
+        resolve(parent, args, ctx) {
+          ensureContextHasModel(ctx);
+
+          return ctx.model(type)
+            .findRelated(parent.id, field)
+            .then(flattenAttributes);
+        },
       },
     };
   }, {});
