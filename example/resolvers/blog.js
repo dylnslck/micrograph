@@ -1,13 +1,11 @@
-import flattenAttributes from '../../src/flattenAttributes';
-import flattenConnection from '../../src/flattenConnection';
-import resolver from '../../src/resolver';
+import flattenConnection from '../flattenConnection';
+import flattenNode from '../flattenNode';
+import { resolver } from '../../src';
 
 export const findBlogsResolver = resolver('findBlogs', {
   resolve(args, ctx, next) {
     ctx.model('blog').find(args.options).then(data => {
       ctx.data = data;
-
-      // FIXME: change API to pass data along through next? next(data)??;
       next();
     });
   },
@@ -31,7 +29,7 @@ export const fetchBlogResolver = resolver('fetchBlog', {
   },
 
   finalize(ctx) {
-    return flattenAttributes(ctx.data);
+    return flattenNode(ctx.data);
   },
 });
 
@@ -44,7 +42,7 @@ export const createBlogResolver = resolver('createBlog', {
   },
 
   finalize(ctx) {
-    return flattenAttributes(ctx.data);
+    return flattenNode(ctx.data);
   },
 });
 
@@ -57,7 +55,7 @@ export const updateBlogResolver = resolver('updateBlog', {
   },
 
   finalize(ctx) {
-    return flattenAttributes(ctx.data);
+    return flattenNode(ctx.data);
   },
 });
 
@@ -70,6 +68,6 @@ export const archiveBlogResolver = resolver('archiveBlog', {
   },
 
   finalize(ctx) {
-    return flattenAttributes(ctx.data);
+    return flattenNode(ctx.data);
   },
 });

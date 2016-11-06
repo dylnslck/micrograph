@@ -7,16 +7,17 @@ import {
 
 import titleizeType from './titleizeType';
 
-export default (type, schema) => {
-  const { attributes, relationships } = schema;
+export default (name, type) => {
+  const { attributes, relationships } = type;
 
-  const attributeFields = Object.keys(attributes).reduce((prev, curr) => ({
+  const attributeFields = attributes.reduce((prev, { field, type: attrType }) => ({
     ...prev,
-    [curr]: { type: attributes[curr] },
+    [field]: { type: attrType },
   }), {});
 
-  const relationshipFields = Object.keys(relationships).reduce((prev, curr) => {
-    const { relation } = relationships[curr];
+  const relationshipFields = relationships.reduce((prev, relationship) => {
+    const { field, relation } = relationship;
+
     let inputType;
 
     switch (relation) {
@@ -38,12 +39,12 @@ export default (type, schema) => {
 
     return {
       ...prev,
-      [curr]: { type: inputType },
+      [field]: { type: inputType },
     };
   }, {});
 
   return new GraphQLInputObjectType({
-    name: `${titleizeType(type)}Input`,
+    name: `${titleizeType(name)}Input`,
     fields: {
       ...attributeFields,
       ...relationshipFields,

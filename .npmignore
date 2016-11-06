@@ -1,0 +1,13 @@
+node_modules
+.DS_Store
+.env
+coverage
+coverage.lcov
+.nyc_output
+src
+test
+.babelrc
+.eslintrc
+circle.yml
+codecov.yml
+example

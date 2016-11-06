@@ -9,41 +9,41 @@ import handleResolver from './handleResolver';
 import optionsInputType from './optionsInputType';
 import titleizeType from './titleizeType';
 
-export default (schemas, resolvers, types) => new GraphQLObjectType({
+export default (schema, resolvers, types) => new GraphQLObjectType({
   name: 'Query',
-  fields: () => Object.keys(schemas).reduce((prev, curr) => {
-    const { meta } = schemas[curr];
+  fields: () => schema.types.reduce((prev, type) => {
+    const { meta, name } = type;
 
     if (!meta) {
       throw new Error(
-        'Every schema must have a valid "meta" key. The ' +
-        `"${curr}" schema did not have a "meta" key.`
+        'Every schema must have a valid meta key. The ' +
+        `${name} schema did not have a meta key.`
       );
     }
 
     if (!meta.inflection) {
       throw new Error(
-        'Every schema must have a "meta.inflection" key. ' +
+        'Every schema must have a meta.inflection key. ' +
         'Inflection keys are required to properly build GraphQL queries. Please add a ' +
-        `"meta.inflection" key to the "${curr}" schema.`
+        `meta.inflection key to the ${name} schema.`
       );
     }
 
     const { inflection } = meta;
-    const connectionType = buildConnectionType(curr, types[curr]);
-    const fetchQueryName = `fetch${titleizeType(curr)}`;
+    const connectionType = buildConnectionType(name, types[name]);
+    const fetchQueryName = `fetch${titleizeType(name)}`;
     const findQueryName = `find${titleizeType(inflection)}`;
 
     if (!resolvers.hasOwnProperty(fetchQueryName)) {
       throw new Error(
-        `Tried to build the "${fetchQueryName}" root query, but the "${fetchQueryName}" resolver ` +
+        `Tried to build the ${fetchQueryName} root query, but the ${fetchQueryName} resolver ` +
         'was not found.'
       );
     }
 
     if (!resolvers.hasOwnProperty(findQueryName)) {
       throw new Error(
-        `Tried to build the "${findQueryName}" root query, but the "${findQueryName}" resolver ` +
+        `Tried to build the ${findQueryName} root query, but the ${findQueryName} resolver ` +
         'was not found.'
       );
     }
@@ -53,7 +53,7 @@ export default (schemas, resolvers, types) => new GraphQLObjectType({
 
       // retrieve a single node
       [fetchQueryName]: {
-        type: types[curr],
+        type: types[name],
         args: {
           id: { type: new GraphQLNonNull(GraphQLID) },
         },

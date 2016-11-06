@@ -8,32 +8,34 @@ import buildInputType from './buildInputType';
 import handleResolver from './handleResolver';
 import titleizeType from './titleizeType';
 
-export default (schemas, resolvers, types) => new GraphQLObjectType({
+export default (schema, resolvers, types) => new GraphQLObjectType({
   name: 'Mutation',
-  fields: () => Object.keys(schemas).reduce((prev, curr) => {
-    const inputType = buildInputType(curr, schemas[curr]);
-    const createMutationName = `create${titleizeType(curr)}`;
-    const updateMutationName = `update${titleizeType(curr)}`;
-    const archiveMutationName = `archive${titleizeType(curr)}`;
+  fields: () => schema.types.reduce((prev, type) => {
+    const { name } = type;
+
+    const inputType = buildInputType(name, type);
+    const createMutationName = `create${titleizeType(name)}`;
+    const updateMutationName = `update${titleizeType(name)}`;
+    const archiveMutationName = `archive${titleizeType(name)}`;
 
     if (!resolvers.hasOwnProperty(createMutationName)) {
       throw new Error(
-        `Tried to build the "${createMutationName}" root mutation, but the ` +
-        `"${createMutationName}" resolver was not found.`
+        `Tried to build the ${createMutationName} root mutation, but the ` +
+        `${createMutationName} resolver was not found.`
       );
     }
 
     if (!resolvers.hasOwnProperty(updateMutationName)) {
       throw new Error(
-        `Tried to build the "${updateMutationName}" root mutation, but the ` +
-        `"${updateMutationName}" resolver was not found.`
+        `Tried to build the ${updateMutationName} root mutation, but the ` +
+        `${updateMutationName} resolver was not found.`
       );
     }
 
     if (!resolvers.hasOwnProperty(archiveMutationName)) {
       throw new Error(
-        `Tried to build the "${archiveMutationName}" root mutation, but the ` +
-        `"${archiveMutationName}" resolver was not found.`
+        `Tried to build the ${archiveMutationName} root mutation, but the ` +
+        `${archiveMutationName} resolver was not found.`
       );
     }
 
@@ -42,7 +44,7 @@ export default (schemas, resolvers, types) => new GraphQLObjectType({
 
       // create a new node
       [createMutationName]: {
-        type: types[curr],
+        type: types[name],
         args: {
           input: { type: new GraphQLNonNull(inputType) },
         },
@@ -53,7 +55,7 @@ export default (schemas, resolvers, types) => new GraphQLObjectType({
 
       // update an existing node
       [updateMutationName]: {
-        type: types[curr],
+        type: types[name],
         args: {
           id: { type: new GraphQLNonNull(GraphQLID) },
           input: { type: new GraphQLNonNull(inputType) },
@@ -65,7 +67,7 @@ export default (schemas, resolvers, types) => new GraphQLObjectType({
 
       // archive an existing node
       [archiveMutationName]: {
-        type: types[curr],
+        type: types[name],
         args: {
           id: { type: new GraphQLNonNull(GraphQLID) },
         },

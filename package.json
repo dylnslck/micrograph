@@ -1,10 +1,10 @@
 {
-  "name": "redink-graphql",
-  "version": "0.0.1-alpha.0",
-  "description": "GraphQL utilities for Redink",
-  "repository": "directlyio/redink-graphql",
-  "main": "index.js",
-  "author": "Dylan Slack <dylanslack@gmail.com> (http://www.dylanslack.me)",
+  "name": "micrograph",
+  "version": "1.0.0-alpha.1",
+  "description": "GraphQL middleware framework",
+  "repository": "directlyio/micrograph",
+  "main": "dist/index.js",
+  "author": "Dylan Slack <dylanslack@gmail.com> (http://www.dylanslack.com)",
   "license": "MIT",
   "scripts": {
     "build": "npm run clean && mkdirp dist && babel src --out-dir dist",
@@ -24,6 +24,7 @@
     "babel-eslint": "^6.1.2",
     "babel-preset-es2015": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
+    "cohere": "^1.0.2",
     "eslint": "^3.0.1",
     "eslint-config-airbnb": "^9.0.1",
     "eslint-plugin-import": "^1.10.3",
@@ -31,8 +32,7 @@
     "eslint-plugin-react": "^5.2.2",
     "express": "^4.14.0",
     "express-graphql": "^0.5.4",
-    "redink": "next",
-    "redink-schema": "0.0.3"
+    "redink": "next"
   },
   "ava": {
     "files": [

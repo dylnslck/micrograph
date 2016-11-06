@@ -1,10 +1,10 @@
-import flattenAttributes from './flattenAttributes';
+import flattenNode from './flattenNode';
 
 export default (connection) => ({
   totalCount: connection.totalCount,
   pageInfo: connection.pageInfo,
   edges: connection.edges.map(({ node, cursor }) => ({
-    node: flattenAttributes(node),
+    node: flattenNode(node),
     cursor,
   })),
 });

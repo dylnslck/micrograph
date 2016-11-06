@@ -1,6 +1,6 @@
-import flattenAttributes from '../../src/flattenAttributes';
-import flattenConnection from '../../src/flattenConnection';
-import resolver from '../../src/resolver';
+import flattenConnection from '../flattenConnection';
+import flattenNode from '../flattenNode';
+import { resolver } from '../../src';
 
 export const findUsersResolver = resolver('findUsers', {
   resolve(args, ctx, next) {
@@ -31,7 +31,7 @@ export const fetchUserResolver = resolver('fetchUser', {
   },
 
   finalize(ctx) {
-    return flattenAttributes(ctx.data);
+    return flattenNode(ctx.data);
   },
 });
 
@@ -52,7 +52,7 @@ export const createUserResolver = resolver('createUser', {
   },
 
   finalize(ctx) {
-    return flattenAttributes(ctx.data);
+    return flattenNode(ctx.data);
   },
 });
 
@@ -65,7 +65,7 @@ export const updateUserResolver = resolver('updateUser', {
   },
 
   finalize(ctx) {
-    return flattenAttributes(ctx.data);
+    return flattenNode(ctx.data);
   },
 });
 
@@ -78,6 +78,6 @@ export const archiveUserResolver = resolver('archiveUser', {
   },
 
   finalize(ctx) {
-    return flattenAttributes(ctx.data);
+    return flattenNode(ctx.data);
   },
 });
