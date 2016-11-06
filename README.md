@@ -1,141 +1,153 @@
-# redink-graphql
-⧟ GraphQL utilities for Redink
+# micrograph
+⧟ GraphQL middleware framework
+
+## What?
+Micrograph is a GraphQL middleware framework that derives queries and mutations from a [cohere](https://github.com/directlyio/cohere) schema. Appropriate documentation is coming soon
+and Micrograph should not be considered stable for production.
 
 ## Getting started
 ```
-$ npm i -S redink-schema
-$ npm i -S redink-graphql
+$ npm i -S cohere
 $ npm i -S graphql
 ```
 
-Creating a Redink GraphQL schema is essentially the same as creating a normal Redink schema; the
-difference is that attributes are typed using GraphQL types.
-
-
+### Create a schema
 ```js
-import schema, { hasMany, belongsTo } from 'redink-schema';
+// schema.js
+import Schema, { hasMany, belongsTo } from 'cohere';
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 
-export const user = schema('user', {
+const schema = new Schema();
+
+schema.defineType('user', {
   attributes: {
     name: GraphQLString,
     email: new GraphQLNonNull(GraphQLString),
   },
   relationships: {
-    blogs: hasMany('blog', 'author'),
+    blogs: hasMany('blog', 'author', {
+      resolve(user, args, ctx) {
+        return user.getBlogs();
+      },
+    }),
   },
   meta: {
+    inflection: 'users',
     description: 'A user is a person who can write blogs, among other things.',
   },
 });
 
-export const blog = schema('blog', {
+schema.defineType('blog', {
   attributes: {
     title: GraphQLString,
   },
   relationships: {
-    author: belongsTo('user', 'blogs'),
+    author: belongsTo('user', 'blogs', {
+      resolve(blog, args, ctx) {
+        return blog.getAuthor();
+      },
+    }),
   },
   meta: {
+    inflection: 'blogs',
     description: 'A blog is some online content, usually written by a user.',
   },
 });
+
+export default schema.compile();
 ```
 
-Then compile the schemas and plug them into your server (i.e. `express-graphql`). There is one
-caveat: you need to pass in Redink's `model` method into `graphqlHTTP`'s `context` property.
+### Create some resolvers
+Resolvers supply the root queries and root mutations with their resolve methods. Resolvers also
+support middleware.
 
 ```js
-import redink, { model } from 'redink';
-import compile from 'redink-graphql';
-import express from 'express';
-import graphqlHTTP from 'express-graphql';
-import * as schemas from './schemas';
+// resolvers.js
+import { compile, resolver } from 'micrograph';
+import schema from './schema';
 
-const app = express();
+export const fetchUserResolver = resolver('fetchUser', {
+  resolve(args, ctx, next) {
+    return ctx.db.fetchUser(args.id).then(next);
+  },
+});
 
-redink()
+export const findUsersResolver = resolver('findUsers', {
+  resolve(args, ctx, next) {
+    return ctx.db.findUsers(args.options).then(next);
+  },
+});
 
-  // connect to Redink using the defined schemas from above
-  .connect({
-    host: process.env.RETHINKDB_HOST,
-    verbose: true,
-    db: 'test',
-    schemas,
-  })
+export const createUserResolver = resolver('createUser', {
+  resolve(args, ctx, next) {
+    return ctx.db.createUser(args.input).then(next);
+  },
+});
 
-  // once connected, start the GraphQL server using the compiled schemas
-  .then(() => {
-    const graphQLSchema = compile(redink().instance().schemas);
+export const updateUserResolver = resolver('updateUser', {
+  resolve(args, ctx, next) {
+    return ctx.db.updateUser(args.id, args.input).then(next);
+  },
+});
 
-    app.use('/graphql', graphqlHTTP({
-      schema: graphQLSchema,
-      context: { model },
-      graphiql: true,
-    }));
+export const archiveUserResolver = resolver('archiveUser', {
+  resolve(args, ctx, next) {
+    return ctx.db.archiveUser(args.id).then(next);
+  },
+});
 
-    app.listen(4000, () => {
-      console.log('Running a GraphQL API server at localhost:4000/graphql');
-    });
-  });
+// the above resolvers would also be defined for 'fetchBlog', 'findBlogs', 'createBlog',
+// 'updateBlog' and 'archiveBlog'
+
+export default compile(schema, resolvers); // fully functional GraphQL schema
 ```
 
-Then, various queries and mutations are available for each defined schema.
+The compiled schema from the previous example is roughly equivalent to the following GraphQL schema (omitting blog types for brevity).
+
+```
+type Query {
+  fetchUser(id: ID!): User
+  findUsers(options: Options): UserConnection
+}
+
+type Mutation {
+  createUser(input: UserInput!): User
+  updateUser(id: ID!, input: UserInput!): User
+  archiveUser(id: ID!): User
+}
+
+type User {
+  name: String
+  email: String!
+  blogs: BlogConnection
+}
+
+type UserInput {
+  name: String
+  email: String
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+```
+
+### Middleware
+Each resolver is allowed some `before` and `after` middleware.
 
 ```js
-{
-  user(id: "1") {
-    id
-    name
-    blogs {
-      id
-      title
-      author {
-        id
-        name
-      }
-    }
-  }
-}
+// middleware.js
+import createUserResolver from './resolvers';
 
-{
-  users {
-    id
-    name
-    blogs {
-      ...
-    }
+createUserResolver.before((args, ctx, next) => {
+  if (!ctx.request.headers.authorization) {
+    throw new HttpError(401);
   }
-}
 
-mutation {
-  createUser(input: {
-    name: "Bob"
-  }) {
-    id
-    name
-  }
-}
-
-mutation {
-  updateUser(id: "1", input: {
-    name: "Billy"
-  }) {
-    id
-    name
-  }
-}
-
-mutation {
-  archiveUser(id: "1") {
-    id
-    name
-  }
-}
+  next();
+});
 ```
-
-## Todo
-- [ ] Add ability to inject custom hooks into `resolve` methods
 
 ## License
 [MIT](https://github.com/directlyio/redink-graphql/LICENSE)
