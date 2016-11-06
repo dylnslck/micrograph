@@ -14,6 +14,7 @@ export default (schemas, name, types) => {
 
   const { type, relationships } = schemas[name];
 
+  // TODO: determine how to handle field resolvers in root resolvers
   return Object.keys(relationships).reduce((prev, curr) => {
     const typeString = relationships[curr].type;
     const { field, relation } = relationships[curr];

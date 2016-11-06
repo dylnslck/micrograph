@@ -6,6 +6,7 @@ import {
   GraphQLInt,
 } from 'graphql';
 
+import errorsType from './errorsType';
 import titleizeType from './titleizeType';
 
 const PageInfoType = new GraphQLObjectType({
@@ -21,6 +22,7 @@ const PageInfoType = new GraphQLObjectType({
 export default (name, type) => new GraphQLObjectType({
   name: `${titleizeType(name)}Connection`,
   fields: {
+    errors: { type: errorsType },
     pageInfo: { type: PageInfoType },
     totalCount: { type: GraphQLInt },
     edges: {

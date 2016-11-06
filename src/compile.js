@@ -4,10 +4,10 @@ import createMutationRootType from './createMutationRootType';
 import createQueryRootType from './createQueryRootType';
 import instantiateObjectTypes from './instantiateObjectTypes';
 
-export default (schemas) => {
+export default (schemas, resolvers) => {
   const types = instantiateObjectTypes(schemas);
-  const QueryRootType = createQueryRootType(schemas, types);
-  const MutationRootType = createMutationRootType(schemas, types);
+  const QueryRootType = createQueryRootType(schemas, resolvers, types);
+  const MutationRootType = createMutationRootType(schemas, resolvers, types);
 
   return new GraphQLSchema({
     query: QueryRootType,

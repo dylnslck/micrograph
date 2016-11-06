@@ -6,7 +6,7 @@ export default (schemas, name) => {
     );
   }
 
-  const attributes = schemas[name].attributes;
+  const { attributes } = schemas[name];
 
   return Object.keys(attributes).reduce((prev, curr) => ({
     ...prev,

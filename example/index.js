@@ -4,6 +4,7 @@ import schema, { hasMany, belongsTo } from 'redink-schema';
 import express from 'express';
 import graphqlHTTP from 'express-graphql';
 import compile from '../src';
+import * as resolvers from './resolvers';
 
 const schemas = {
   user: schema('user', {
@@ -43,11 +44,17 @@ redink().connect({
 }).then(() => {
   console.log('Redink connected!'); // eslint-disable-line
 
-  app.use('/graphql', graphqlHTTP({
-    schema: compile(redink().instance().schemas),
-    context: { model },
+  app.use('/graphql', graphqlHTTP(request => ({
+    schema: compile(redink().instance().schemas, resolvers),
+    context: { request, model },
     graphiql: true,
-  }));
+    formatError(err) {
+      return {
+        message: err.message,
+        stack: err.stack,
+      };
+    },
+  })));
 
   app.listen(4000, () => {
     console.log('Running a GraphQL API server at localhost:4000/graphql!'); // eslint-disable-line

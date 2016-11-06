@@ -5,59 +5,71 @@ import {
 } from 'graphql';
 
 import buildConnectionType from './buildConnectionType';
-import ensureContextHasModel from './ensureContextHasModel';
-import flattenAttributes from './flattenAttributes';
-import flattenConnection from './flattenConnection';
+import handleResolver from './handleResolver';
 import optionsInputType from './optionsInputType';
 import titleizeType from './titleizeType';
 
-export default (schemas, types) => new GraphQLObjectType({
+export default (schemas, resolvers, types) => new GraphQLObjectType({
   name: 'Query',
   fields: () => Object.keys(schemas).reduce((prev, curr) => {
     const { meta } = schemas[curr];
 
     if (!meta) {
       throw new Error(
-        'When using \'redink-graphql\', every schema must have a valid \'meta\' key. The ' +
-        `${curr} schema did not have a 'meta' key.`
+        'Every schema must have a valid "meta" key. The ' +
+        `"${curr}" schema did not have a "meta" key.`
       );
     }
 
     if (!meta.inflection) {
       throw new Error(
-        'When using \'redink-graphql\', every schema must have a \'meta.inflection\' key. ' +
+        'Every schema must have a "meta.inflection" key. ' +
         'Inflection keys are required to properly build GraphQL queries. Please add a ' +
-        `'meta.inflection' key to the '${curr}' schema.`
+        `"meta.inflection" key to the "${curr}" schema.`
       );
     }
 
     const { inflection } = meta;
-    const ConnectionType = buildConnectionType(curr, types[curr]);
+    const connectionType = buildConnectionType(curr, types[curr]);
+    const fetchQueryName = `fetch${titleizeType(curr)}`;
+    const findQueryName = `find${titleizeType(inflection)}`;
+
+    if (!resolvers.hasOwnProperty(fetchQueryName)) {
+      throw new Error(
+        `Tried to build the "${fetchQueryName}" root query, but the "${fetchQueryName}" resolver ` +
+        'was not found.'
+      );
+    }
+
+    if (!resolvers.hasOwnProperty(findQueryName)) {
+      throw new Error(
+        `Tried to build the "${findQueryName}" root query, but the "${findQueryName}" resolver ` +
+        'was not found.'
+      );
+    }
 
     return {
       ...prev,
 
-      // retrieve a single record
-      [`fetch${titleizeType(curr)}`]: {
+      // retrieve a single node
+      [fetchQueryName]: {
         type: types[curr],
         args: {
           id: { type: new GraphQLNonNull(GraphQLID) },
         },
         resolve(root, args, ctx) {
-          ensureContextHasModel(ctx);
-          return ctx.model(curr).fetch(args.id).then(flattenAttributes);
+          return handleResolver(args, ctx, resolvers[fetchQueryName]);
         },
       },
 
-      // retrieve many records
-      [`find${titleizeType(inflection)}`]: {
-        type: ConnectionType,
+      // create a connection
+      [findQueryName]: {
+        type: connectionType,
         args: {
           options: { type: optionsInputType },
         },
         resolve(root, args, ctx) {
-          ensureContextHasModel(ctx);
-          return ctx.model(curr).find(args.options).then(flattenConnection);
+          return handleResolver(args, ctx, resolvers[findQueryName]);
         },
       },
     };
