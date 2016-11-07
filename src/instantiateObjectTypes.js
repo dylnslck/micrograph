@@ -6,6 +6,8 @@ import titleizeType from './titleizeType';
 const getDefaultDescription = (name) => `The ${titleizeType(name)} Cohere model.`;
 
 export default (schema) => {
+  const typeCache = {};
+
   const graphQLObjectTypes = schema.types.reduce((prev, type) => {
     const { meta, name } = type;
 
@@ -15,6 +17,9 @@ export default (schema) => {
         `${name} type did not have a meta key.`
       );
     }
+
+    if (typeCache.hasOwnProperty(name)) return prev;
+    typeCache[name] = true;
 
     return {
       ...prev,
