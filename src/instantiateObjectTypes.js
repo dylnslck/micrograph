@@ -4,10 +4,9 @@ import buildRelationships from './buildRelationships';
 import titleizeType from './titleizeType';
 
 const getDefaultDescription = (name) => `The ${titleizeType(name)} Cohere model.`;
+const typeCache = {};
 
 export default (schema) => {
-  const typeCache = {};
-
   const graphQLObjectTypes = schema.types.reduce((prev, type) => {
     const { meta, name } = type;
 
