@@ -16,13 +16,16 @@ export default (name, type) => {
   }), {});
 
   const relationshipFields = relationships.reduce((prev, relationship) => {
-    const { field, relation } = relationship;
-
+    const { field, relation, inverse } = relationship;
     let inputType;
 
     switch (relation) {
       case 'hasMany':
-        inputType = new GraphQLList(new GraphQLNonNull(GraphQLID));
+        if (inverse.relation === 'hasMany') {
+          inputType = new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLID)));
+        } else {
+          inputType = new GraphQLList(new GraphQLNonNull(GraphQLID));
+        }
         break;
 
       case 'hasOne':

@@ -10,7 +10,7 @@ import flattenNode from './flattenNode';
 import middleware from './middleware';
 import * as resolvers from './resolvers';
 
-const schema = new Schema()
+export const schema = new Schema()
   .defineType('user', {
     attributes: {
       name: GraphQLString,
@@ -54,9 +54,10 @@ redink().connect({
   db: 'test',
 }).then(() => {
   console.log('Redink connected!'); // eslint-disable-line
+  const compiledSchema = compile(schema, resolvers, middleware);
 
   app.use('/graphql', graphqlHTTP({
-    schema: compile(schema, resolvers, middleware),
+    schema: compiledSchema,
     context: { model },
     graphiql: true,
   }));
