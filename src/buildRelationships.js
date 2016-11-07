@@ -1,6 +1,8 @@
 import buildConnectionType from './buildConnectionType';
 import optionsInputType from './optionsInputType';
 
+const connectionTypes = {};
+
 export default (type, types) => {
   const { relationships } = type;
 
@@ -15,10 +17,19 @@ export default (type, types) => {
     }
 
     if (relation === 'hasMany') {
+      let connectionType;
+
+      if (connectionTypes.hasOwnProperty(field)) {
+        connectionType = connectionTypes[field];
+      } else {
+        connectionType = buildConnectionType(field, types[name]);
+        connectionTypes[field] = connectionType;
+      }
+
       return {
         ...prev,
         [field]: {
-          type: buildConnectionType(field, types[name]),
+          type: connectionType,
           args: {
             options: { type: optionsInputType },
           },
