@@ -1,8 +1,8 @@
 import flattenConnection from '../flattenConnection';
 import flattenNode from '../flattenNode';
-import { resolver } from '../../src';
+import { createResolver } from '../../src';
 
-export const findBlogsResolver = resolver('findBlogs', {
+export const findBlogsResolver = createResolver('findBlogs', {
   resolve(args, ctx, next) {
     ctx.model('blog').find(args.options).then(data => {
       ctx.data = data;
@@ -20,7 +20,7 @@ export const findBlogsResolver = resolver('findBlogs', {
   },
 });
 
-export const fetchBlogResolver = resolver('fetchBlog', {
+export const fetchBlogResolver = createResolver('fetchBlog', {
   resolve(args, ctx, next) {
     ctx.model('blog').fetch(args.id).then(data => {
       ctx.data = data;
@@ -33,7 +33,7 @@ export const fetchBlogResolver = resolver('fetchBlog', {
   },
 });
 
-export const createBlogResolver = resolver('createBlog', {
+export const createBlogResolver = createResolver('createBlog', {
   resolve(args, ctx, next) {
     ctx.model('blog').create(args.input).then(data => {
       ctx.data = data;
@@ -46,7 +46,7 @@ export const createBlogResolver = resolver('createBlog', {
   },
 });
 
-export const updateBlogResolver = resolver('updateBlog', {
+export const updateBlogResolver = createResolver('updateBlog', {
   resolve(args, ctx, next) {
     ctx.model('blog').update(args.id, args.input).then(data => {
       ctx.data = data;
@@ -59,7 +59,7 @@ export const updateBlogResolver = resolver('updateBlog', {
   },
 });
 
-export const archiveBlogResolver = resolver('archiveBlog', {
+export const archiveBlogResolver = createResolver('archiveBlog', {
   resolve(args, ctx, next) {
     ctx.model('blog').archive(args.id).then(data => {
       ctx.data = data;

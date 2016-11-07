@@ -1,8 +1,8 @@
 import flattenConnection from '../flattenConnection';
 import flattenNode from '../flattenNode';
-import { resolver } from '../../src';
+import { createResolver } from '../../src';
 
-export const findUsersResolver = resolver('findUsers', {
+export const findUsersResolver = createResolver('findUsers', {
   resolve(args, ctx, next) {
     ctx.model('user').find(args.options).then(data => {
       ctx.data = data;
@@ -22,7 +22,7 @@ export const findUsersResolver = resolver('findUsers', {
   },
 });
 
-export const fetchUserResolver = resolver('fetchUser', {
+export const fetchUserResolver = createResolver('fetchUser', {
   resolve(args, ctx, next) {
     ctx.model('user').fetch(args.id).then(data => {
       ctx.data = data;
@@ -35,15 +35,7 @@ export const fetchUserResolver = resolver('fetchUser', {
   },
 });
 
-fetchUserResolver.before((args, ctx, next) => {
-  if (!ctx.request.headers.authorization) {
-    throw new Error('Not authorized!');
-  }
-
-  next();
-});
-
-export const createUserResolver = resolver('createUser', {
+export const createUserResolver = createResolver('createUser', {
   resolve(args, ctx, next) {
     ctx.model('user').create(args.input).then(data => {
       ctx.data = data;
@@ -56,7 +48,7 @@ export const createUserResolver = resolver('createUser', {
   },
 });
 
-export const updateUserResolver = resolver('updateUser', {
+export const updateUserResolver = createResolver('updateUser', {
   resolve(args, ctx, next) {
     ctx.model('user').update(args.id, args.input).then(data => {
       ctx.data = data;
@@ -69,7 +61,7 @@ export const updateUserResolver = resolver('updateUser', {
   },
 });
 
-export const archiveUserResolver = resolver('archiveUser', {
+export const archiveUserResolver = createResolver('archiveUser', {
   resolve(args, ctx, next) {
     ctx.model('user').archive(args.id).then(data => {
       ctx.data = data;

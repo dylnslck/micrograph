@@ -18,11 +18,6 @@ const call = (fn, args, ctx, next) => {
 };
 
 class Resolver {
-  stack = {
-    before: [],
-    after: [],
-  }
-
   constructor(name, { resolve, finalize = (ctx) => ctx }) {
     if (typeof name !== 'string') {
       throw new TypeError('Argument "name" must be a string.');
@@ -38,52 +33,24 @@ class Resolver {
     this.handle = this.handle.bind(this);
   }
 
-  filterStack() {
+  filterStack(stack) {
     const { name } = this;
     const isMatch = ({ pattern }) => doesPatternMatch(pattern, name);
 
     return {
-      before: this.stack.before.filter(isMatch),
-      after: this.stack.after.filter(isMatch),
+      before: stack.before.filter(isMatch),
+      after: stack.after.filter(isMatch),
     };
   }
 
-  before(pattern, fn) {
-    if (!fn) {
-      if (typeof pattern !== 'function') {
-        throw new TypeError('Resolver middleware must be called with a function.');
-      }
+  handle(stack, args, ctx, done) {
+    const { before, after } = this.filterStack(stack);
+    const layers = [
+      ...before,
+      { fn: this.resolve },
+      ...after,
+    ];
 
-      fn = pattern;
-      pattern = '*';
-    } else {
-      if (typeof fn !== 'function') {
-        throw new TypeError('Resolver middleware must be called with a function.');
-      }
-    }
-
-    this.stack.before.push({ pattern, fn });
-  }
-
-  after(pattern, fn) {
-    if (!fn) {
-      if (typeof pattern !== 'function') {
-        throw new TypeError('Resolver middleware must be called with a function.');
-      }
-
-      fn = pattern;
-      pattern = '*';
-    } else {
-      if (typeof fn !== 'function') {
-        throw new TypeError('Resolver middleware must be called with a function.');
-      }
-    }
-
-    this.stack.after.push({ pattern, fn });
-  }
-
-  handle(args, ctx, done) {
-    const layers = this.layers;
     let index = 0;
 
     const next = (mutableArgs, mutableCtx) => {
@@ -98,20 +65,6 @@ class Resolver {
     };
 
     next(args, { ...ctx, errors: [] });
-  }
-
-  get layers() {
-    if (!this.filteredStackCache) {
-      this.filteredStackCache = this.filterStack();
-    }
-
-    const { before, after } = this.filteredStackCache;
-
-    return [
-      ...before,
-      { fn: this.resolve },
-      ...after,
-    ];
   }
 }
 

@@ -57,49 +57,61 @@ schema.defineType('blog', {
 export default schema.compile();
 ```
 
-### Create some resolvers
+### Resolvers and middleware
 Resolvers supply the root queries and root mutations with their resolve methods. Resolvers also
 support middleware.
 
 ```js
 // resolvers.js
-import { compile, resolver } from 'micrograph';
+import { compile, createResolver, createMiddleware } from 'micrograph';
 import schema from './schema';
 
-export const fetchUserResolver = resolver('fetchUser', {
+export const fetchUserResolver = createResolver('fetchUser', {
   resolve(args, ctx, next) {
     return ctx.db.fetchUser(args.id).then(next);
   },
 });
 
-export const findUsersResolver = resolver('findUsers', {
+export const findUsersResolver = createResolver('findUsers', {
   resolve(args, ctx, next) {
     return ctx.db.findUsers(args.options).then(next);
   },
 });
 
-export const createUserResolver = resolver('createUser', {
+export const createUserResolver = createResolver('createUser', {
   resolve(args, ctx, next) {
     return ctx.db.createUser(args.input).then(next);
   },
 });
 
-export const updateUserResolver = resolver('updateUser', {
+export const updateUserResolver = createResolver('updateUser', {
   resolve(args, ctx, next) {
     return ctx.db.updateUser(args.id, args.input).then(next);
   },
 });
 
-export const archiveUserResolver = resolver('archiveUser', {
+export const archiveUserResolver = createResolver('archiveUser', {
   resolve(args, ctx, next) {
     return ctx.db.archiveUser(args.id).then(next);
   },
 });
 
+export const middleware = createMiddleware();
+
+middleware.before((args, ctx, next) => {
+  ctx.startTime = Date.now();
+  next();
+});
+
+middleware.after((args, ctx, next) => {
+  ctx.totalDuration = Date.now() - ctx.startTime;
+  next();
+});
+
 // the above resolvers would also be defined for 'fetchBlog', 'findBlogs', 'createBlog',
 // 'updateBlog' and 'archiveBlog'
 
-export default compile(schema, resolvers); // fully functional GraphQL schema
+export default compile(schema, resolvers, middleware); // fully functional GraphQL schema
 ```
 
 The compiled schema from the previous example is roughly equivalent to the following GraphQL schema (omitting blog types for brevity).
@@ -131,22 +143,6 @@ schema {
   query: Query
   mutation: Mutation
 }
-```
-
-### Middleware
-Each resolver is allowed some `before` and `after` middleware.
-
-```js
-// middleware.js
-import createUserResolver from './resolvers';
-
-createUserResolver.before((args, ctx, next) => {
-  if (!ctx.request.headers.authorization) {
-    throw new HttpError(401);
-  }
-
-  next();
-});
 ```
 
 ## License

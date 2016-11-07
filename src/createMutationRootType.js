@@ -8,7 +8,7 @@ import buildInputType from './buildInputType';
 import handleResolver from './handleResolver';
 import titleizeType from './titleizeType';
 
-export default (schema, resolvers, types) => new GraphQLObjectType({
+export default (schema, resolvers, middleware, types) => new GraphQLObjectType({
   name: 'Mutation',
   fields: () => schema.types.reduce((prev, type) => {
     const { name } = type;
@@ -49,7 +49,7 @@ export default (schema, resolvers, types) => new GraphQLObjectType({
           input: { type: new GraphQLNonNull(inputType) },
         },
         resolve(root, args, ctx) {
-          return handleResolver(args, ctx, resolvers[createMutationName]);
+          return handleResolver(args, ctx, resolvers[createMutationName], middleware);
         },
       },
 
@@ -61,7 +61,7 @@ export default (schema, resolvers, types) => new GraphQLObjectType({
           input: { type: new GraphQLNonNull(inputType) },
         },
         resolve(root, args, ctx) {
-          return handleResolver(args, ctx, resolvers[updateMutationName]);
+          return handleResolver(args, ctx, resolvers[updateMutationName], middleware);
         },
       },
 
@@ -72,7 +72,7 @@ export default (schema, resolvers, types) => new GraphQLObjectType({
           id: { type: new GraphQLNonNull(GraphQLID) },
         },
         resolve(root, args, ctx) {
-          return handleResolver(args, ctx, resolvers[archiveMutationName]);
+          return handleResolver(args, ctx, resolvers[archiveMutationName], middleware);
         },
       },
     };

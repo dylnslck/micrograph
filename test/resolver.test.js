@@ -1,5 +1,5 @@
 import test from 'ava';
-import resolver from '../src/resolver';
+import { createResolver, createMiddleware } from '../src';
 
 const argsAreValid = (t, args, ctx, next) => {
   t.is(typeof args, 'object');
@@ -8,7 +8,7 @@ const argsAreValid = (t, args, ctx, next) => {
 };
 
 test('should run asnyc/sync middleware in order with valid patterns', async t => {
-  const userResolver = resolver('createUser', {
+  const userResolver = createResolver('createUser', {
     resolve(args, ctx, next) {
       argsAreValid(t, args, ctx, next);
 
@@ -19,7 +19,9 @@ test('should run asnyc/sync middleware in order with valid patterns', async t =>
     },
   });
 
-  userResolver.before((args, ctx, next) => {
+  const middleware = createMiddleware();
+
+  middleware.before((args, ctx, next) => {
     argsAreValid(t, args, ctx, next);
 
     setTimeout(() => {
@@ -28,7 +30,7 @@ test('should run asnyc/sync middleware in order with valid patterns', async t =>
     }, 50);
   });
 
-  userResolver.before('*', (args, ctx, next) => {
+  middleware.before('*', (args, ctx, next) => {
     argsAreValid(t, args, ctx, next);
 
     setTimeout(() => {
@@ -37,37 +39,37 @@ test('should run asnyc/sync middleware in order with valid patterns', async t =>
     }, 50);
   });
 
-  userResolver.before('invalid*', (args, ctx, next) => {
+  middleware.before('invalid*', (args, ctx, next) => {
     argsAreValid(t, args, ctx, next);
     ctx.alphabetical += 'invalid';
     next();
   });
 
-  userResolver.before('create*', (args, ctx, next) => {
+  middleware.before('create*', (args, ctx, next) => {
     argsAreValid(t, args, ctx, next);
     ctx.alphabetical += 'c';
     next();
   });
 
-  userResolver.before('createUser', (args, ctx, next) => {
+  middleware.before('createUser', (args, ctx, next) => {
     argsAreValid(t, args, ctx, next);
     ctx.alphabetical += 'd';
     next();
   });
 
-  userResolver.after('createUser', (args, ctx, next) => {
+  middleware.after('createUser', (args, ctx, next) => {
     argsAreValid(t, args, ctx, next);
     ctx.alphabetical += 'f';
     next();
   });
 
-  userResolver.after('create*', (args, ctx, next) => {
+  middleware.after('create*', (args, ctx, next) => {
     argsAreValid(t, args, ctx, next);
     ctx.alphabetical += 'g';
     next();
   });
 
-  userResolver.after('*', (args, ctx, next) => {
+  middleware.after('*', (args, ctx, next) => {
     argsAreValid(t, args, ctx, next);
     ctx.alphabetical += 'h';
     next();
@@ -77,27 +79,29 @@ test('should run asnyc/sync middleware in order with valid patterns', async t =>
     const args = {};
     const ctx = { alphabetical: '' };
 
-    userResolver.handle(args, ctx, resolve);
+    userResolver.handle(middleware.stack, args, ctx, resolve);
   }).then(ctx => {
     t.is(ctx.alphabetical, 'abcdefgh');
   });
 });
 
 test('should pass errors down the stack', async t => {
-  const userResolver = resolver('createUser', {
+  const userResolver = createResolver('createUser', {
     resolve(args, ctx, next) {
       argsAreValid(t, args, ctx, next);
       next();
     },
   });
 
-  userResolver.before((args, ctx, next) => {
+  const middleware = createMiddleware();
+
+  middleware.before((args, ctx, next) => {
     argsAreValid(t, args, ctx, next);
 
     throw new Error('Oh no!');
   });
 
-  userResolver.after((args, ctx, next) => {
+  middleware.after((args, ctx, next) => {
     argsAreValid(t, args, ctx, next);
 
     throw new Error('Oh no again!');
@@ -107,7 +111,7 @@ test('should pass errors down the stack', async t => {
     const args = {};
     const ctx = {};
 
-    userResolver.handle(args, ctx, resolve);
+    userResolver.handle(middleware.stack, args, ctx, resolve);
   }).then(ctx => {
     t.is(ctx.errors.length, 2);
   });

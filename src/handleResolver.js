@@ -1,4 +1,10 @@
-export default (args, ctx, resolver) => {
+const defaultStack = {
+  before: [],
+  after: [],
+};
+
+export default (args, ctx, resolver, middleware) => {
   const { handle, finalize } = resolver;
-  return new Promise(done => handle(args, ctx, done)).then(finalize);
+  const stack = middleware && middleware.stack || defaultStack;
+  return new Promise(done => handle(stack, args, ctx, done)).then(finalize);
 };

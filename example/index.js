@@ -7,6 +7,7 @@ import graphqlHTTP from 'express-graphql';
 import { compile } from '../src';
 import flattenConnection from './flattenConnection';
 import flattenNode from './flattenNode';
+import middleware from './middleware';
 import * as resolvers from './resolvers';
 
 const schema = new Schema()
@@ -55,7 +56,7 @@ redink().connect({
   console.log('Redink connected!'); // eslint-disable-line
 
   app.use('/graphql', graphqlHTTP({
-    schema: compile(schema, resolvers),
+    schema: compile(schema, resolvers, middleware),
     context: { model },
     graphiql: true,
   }));

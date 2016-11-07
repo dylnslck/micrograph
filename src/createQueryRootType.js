@@ -9,7 +9,7 @@ import handleResolver from './handleResolver';
 import optionsInputType from './optionsInputType';
 import titleizeType from './titleizeType';
 
-export default (schema, resolvers, types) => new GraphQLObjectType({
+export default (schema, resolvers, middleware, types) => new GraphQLObjectType({
   name: 'Query',
   fields: () => schema.types.reduce((prev, type) => {
     const { meta, name } = type;
@@ -58,7 +58,7 @@ export default (schema, resolvers, types) => new GraphQLObjectType({
           id: { type: new GraphQLNonNull(GraphQLID) },
         },
         resolve(root, args, ctx) {
-          return handleResolver(args, ctx, resolvers[fetchQueryName]);
+          return handleResolver(args, ctx, resolvers[fetchQueryName], middleware);
         },
       },
 
@@ -69,7 +69,7 @@ export default (schema, resolvers, types) => new GraphQLObjectType({
           options: { type: optionsInputType },
         },
         resolve(root, args, ctx) {
-          return handleResolver(args, ctx, resolvers[findQueryName]);
+          return handleResolver(args, ctx, resolvers[findQueryName], middleware);
         },
       },
     };
