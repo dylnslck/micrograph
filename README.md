@@ -108,6 +108,16 @@ middleware.after((args, ctx, next) => {
   next();
 });
 
+middleware.before('create*', (args, ctx, next) => {
+  console.log('Fires before any create mutations.');
+  next();
+});
+
+middleware.before('createUser', (args, next, next) => {
+  console.log('Fires before the createUser mutation.');
+  next();
+});
+
 // the above resolvers would also be defined for 'fetchBlog', 'findBlogs', 'createBlog',
 // 'updateBlog' and 'archiveBlog'
 
