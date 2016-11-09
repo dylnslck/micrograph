@@ -19,7 +19,7 @@ const PageInfoType = new GraphQLObjectType({
   },
 });
 
-export default (name, type) => new GraphQLObjectType({
+export default (name, graphQLObjectType) => new GraphQLObjectType({
   name: `${titleizeType(name)}Connection`,
   fields: {
     errors: { type: errorsType },
@@ -30,7 +30,7 @@ export default (name, type) => new GraphQLObjectType({
         name: `${titleizeType(name)}ConnectionEdgeType`,
         fields: {
           cursor: { type: GraphQLString },
-          node: { type },
+          node: { type: graphQLObjectType },
         },
       })),
     },

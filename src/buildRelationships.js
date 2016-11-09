@@ -3,7 +3,7 @@ import optionsInputType from './optionsInputType';
 
 const connectionTypes = {};
 
-export default (type, types) => {
+export default (type, graphQLObjectTypes) => {
   const { relationships } = type;
 
   return relationships.reduce((prev, relationship) => {
@@ -22,7 +22,7 @@ export default (type, types) => {
       if (connectionTypes.hasOwnProperty(field)) {
         connectionType = connectionTypes[field];
       } else {
-        connectionType = buildConnectionType(field, types[name]);
+        connectionType = buildConnectionType(field, graphQLObjectTypes[name]);
         connectionTypes[field] = connectionType;
       }
 
@@ -41,7 +41,7 @@ export default (type, types) => {
     return {
       ...prev,
       [field]: {
-        type: types[name],
+        type: graphQLObjectTypes[name],
         resolve,
       },
     };
