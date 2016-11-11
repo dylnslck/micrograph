@@ -10,7 +10,14 @@ const doesPatternMatch = (pattern, name) => {
 
 const call = (fn, args, ctx, next) => {
   try {
-    fn(args, ctx, () => next(args, ctx));
+    const called = fn(args, ctx, () => next(args, ctx));
+
+    if (called && typeof called.then === 'function') {
+      called.then(() => next(args, ctx)).catch(err => {
+        ctx.errors.push(err);
+        next(args, ctx);
+      });
+    }
   } catch (err) {
     ctx.errors.push(err);
     next(args, ctx);

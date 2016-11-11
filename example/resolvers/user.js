@@ -4,6 +4,8 @@ import { createResolver } from '../../src';
 
 export const findUsersResolver = createResolver('findUsers', {
   resolve(args, ctx, next) {
+    console.log('args.options:', args.options);
+
     ctx.model('user').find(args.options).then(data => {
       ctx.data = data;
 

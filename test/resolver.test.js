@@ -33,10 +33,12 @@ test('should run asnyc/sync middleware in order with valid patterns', async t =>
   middleware.before('*', (args, ctx, next) => {
     argsAreValid(t, args, ctx, next);
 
-    setTimeout(() => {
-      ctx.alphabetical += 'b';
-      next();
-    }, 50);
+    return new Promise(resolve => {
+      setTimeout(() => {
+        ctx.alphabetical += 'b';
+        resolve();
+      }, 50);
+    });
   });
 
   middleware.before('invalid*', (args, ctx, next) => {
@@ -101,6 +103,16 @@ test('should pass errors down the stack', async t => {
     throw new Error('Oh no!');
   });
 
+  middleware.before((args, ctx, next) => {
+    argsAreValid(t, args, ctx, next);
+
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        reject(new Error('Thrown in a promise.'));
+      }, 50);
+    });
+  });
+
   middleware.after((args, ctx, next) => {
     argsAreValid(t, args, ctx, next);
 
@@ -113,6 +125,6 @@ test('should pass errors down the stack', async t => {
 
     userResolver.handle(middleware.stack, args, ctx, resolve);
   }).then(ctx => {
-    t.is(ctx.errors.length, 2);
+    t.is(ctx.errors.length, 3);
   });
 });
