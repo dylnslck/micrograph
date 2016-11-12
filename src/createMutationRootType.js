@@ -18,27 +18,6 @@ export default (schema, resolvers, middleware, types) => new GraphQLObjectType({
     const updateMutationName = `update${titleizeType(name)}`;
     const archiveMutationName = `archive${titleizeType(name)}`;
 
-    if (!resolvers.hasOwnProperty(createMutationName)) {
-      throw new Error(
-        `Tried to build the ${createMutationName} root mutation, but the ` +
-        `${createMutationName} resolver was not found.`
-      );
-    }
-
-    if (!resolvers.hasOwnProperty(updateMutationName)) {
-      throw new Error(
-        `Tried to build the ${updateMutationName} root mutation, but the ` +
-        `${updateMutationName} resolver was not found.`
-      );
-    }
-
-    if (!resolvers.hasOwnProperty(archiveMutationName)) {
-      throw new Error(
-        `Tried to build the ${archiveMutationName} root mutation, but the ` +
-        `${archiveMutationName} resolver was not found.`
-      );
-    }
-
     return {
       ...prev,
 
@@ -49,6 +28,12 @@ export default (schema, resolvers, middleware, types) => new GraphQLObjectType({
           input: { type: new GraphQLNonNull(inputType) },
         },
         resolve(root, args, ctx) {
+          if (!resolvers.hasOwnProperty(createMutationName)) {
+            throw new Error(
+              `The ${createMutationName} resolver was never registered.`
+            );
+          }
+
           return handleResolver(args, ctx, resolvers[createMutationName], middleware);
         },
       },
@@ -61,6 +46,12 @@ export default (schema, resolvers, middleware, types) => new GraphQLObjectType({
           input: { type: new GraphQLNonNull(inputType) },
         },
         resolve(root, args, ctx) {
+          if (!resolvers.hasOwnProperty(updateMutationName)) {
+            throw new Error(
+              `The ${updateMutationName} resolver was never registered.`
+            );
+          }
+
           return handleResolver(args, ctx, resolvers[updateMutationName], middleware);
         },
       },
@@ -72,6 +63,12 @@ export default (schema, resolvers, middleware, types) => new GraphQLObjectType({
           id: { type: new GraphQLNonNull(GraphQLID) },
         },
         resolve(root, args, ctx) {
+          if (!resolvers.hasOwnProperty(archiveMutationName)) {
+            throw new Error(
+              `The ${archiveMutationName} resolver was never registered.`
+            );
+          }
+
           return handleResolver(args, ctx, resolvers[archiveMutationName], middleware);
         },
       },

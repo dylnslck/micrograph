@@ -11,12 +11,7 @@ export const findBlogsResolver = createResolver('findBlogs', {
   },
 
   finalize(ctx) {
-    return {
-      ...flattenConnection(ctx.data),
-
-      // FIXME: should not have to be user defined
-      errors: ctx.errors,
-    };
+    return flattenConnection(ctx.data);
   },
 });
 

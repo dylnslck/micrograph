@@ -77,17 +77,19 @@ test('should run asnyc/sync middleware in order with valid patterns', async t =>
     next();
   });
 
-  await new Promise(resolve => {
+  await new Promise((resolve, reject) => {
     const args = {};
     const ctx = { alphabetical: '' };
 
-    userResolver.handle(middleware.stack, args, ctx, resolve);
+    userResolver.handle(middleware.stack, args, ctx, resolve, reject);
   }).then(ctx => {
     t.is(ctx.alphabetical, 'abcdefgh');
   });
 });
 
-test('should pass errors down the stack', async t => {
+test('should handle an error', async t => {
+  let shouldBeTrue;
+
   const userResolver = createResolver('createUser', {
     resolve(args, ctx, next) {
       argsAreValid(t, args, ctx, next);
@@ -99,32 +101,74 @@ test('should pass errors down the stack', async t => {
 
   middleware.before((args, ctx, next) => {
     argsAreValid(t, args, ctx, next);
+    shouldBeTrue = true;
+    next();
+  });
 
+  middleware.before((args, ctx, next) => {
+    argsAreValid(t, args, ctx, next);
     throw new Error('Oh no!');
   });
 
   middleware.before((args, ctx, next) => {
     argsAreValid(t, args, ctx, next);
+    shouldBeTrue = false;
+  });
 
+  await new Promise((resolve, reject) => {
+    const args = {};
+    const ctx = {};
+
+    userResolver.handle(middleware.stack, args, ctx, resolve, reject);
+  }).then(() => {
+    t.fail();
+  }).catch(err => {
+    t.is(shouldBeTrue, true);
+    t.is(err.message, 'Oh no!');
+  });
+});
+
+test('should handle an async error', async t => {
+  let shouldBeTrue;
+
+  const userResolver = createResolver('createUser', {
+    resolve(args, ctx, next) {
+      argsAreValid(t, args, ctx, next);
+      next();
+    },
+  });
+
+  const middleware = createMiddleware();
+
+  middleware.before((args, ctx, next) => {
+    argsAreValid(t, args, ctx, next);
+    shouldBeTrue = true;
+    next();
+  });
+
+  middleware.before((args, ctx, next) => {
+    argsAreValid(t, args, ctx, next);
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        reject(new Error('Thrown in a promise.'));
+        reject(new Error('Oh no!'));
       }, 50);
     });
   });
 
-  middleware.after((args, ctx, next) => {
+  middleware.before((args, ctx, next) => {
     argsAreValid(t, args, ctx, next);
-
-    throw new Error('Oh no again!');
+    shouldBeTrue = false;
   });
 
-  await new Promise(resolve => {
+  await new Promise((resolve, reject) => {
     const args = {};
     const ctx = {};
 
-    userResolver.handle(middleware.stack, args, ctx, resolve);
-  }).then(ctx => {
-    t.is(ctx.errors.length, 3);
+    userResolver.handle(middleware.stack, args, ctx, resolve, reject);
+  }).then(() => {
+    t.fail();
+  }).catch(err => {
+    t.is(shouldBeTrue, true);
+    t.is(err.message, 'Oh no!');
   });
 });

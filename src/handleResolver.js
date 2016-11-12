@@ -4,7 +4,10 @@ const defaultStack = {
 };
 
 export default (args, ctx, resolver, middleware) => {
-  const { handle, finalize } = resolver;
+  const { handle, finalize, error } = resolver;
   const stack = middleware && middleware.stack || defaultStack;
-  return new Promise(done => handle(stack, args, ctx, done)).then(finalize);
+
+  return new Promise((resolve, reject) => handle(stack, args, ctx, resolve, reject))
+    .then(finalize)
+    .catch(error);
 };

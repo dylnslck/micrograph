@@ -4,9 +4,9 @@ import {
   GraphQLBoolean,
   GraphQLString,
   GraphQLInt,
+  GraphQLNonNull,
 } from 'graphql';
 
-import errorsType from './errorsType';
 import titleizeType from './titleizeType';
 
 const PageInfoType = new GraphQLObjectType({
@@ -22,9 +22,9 @@ const PageInfoType = new GraphQLObjectType({
 export default (name, graphQLObjectType) => new GraphQLObjectType({
   name: `${titleizeType(name)}Connection`,
   fields: {
-    errors: { type: errorsType },
     pageInfo: { type: PageInfoType },
     totalCount: { type: GraphQLInt },
+    errors: { type: new GraphQLNonNull(new GraphQLList(GraphQLString)) },
     edges: {
       type: new GraphQLList(new GraphQLObjectType({
         name: `${titleizeType(name)}ConnectionEdgeType`,

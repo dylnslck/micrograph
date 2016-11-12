@@ -4,23 +4,14 @@ import { createResolver } from '../../src';
 
 export const findUsersResolver = createResolver('findUsers', {
   resolve(args, ctx, next) {
-    console.log('args.options:', args.options);
-
     ctx.model('user').find(args.options).then(data => {
       ctx.data = data;
-
-      // FIXME: change API to pass data along through next? next(data)??;
       next();
     });
   },
 
   finalize(ctx) {
-    return {
-      ...flattenConnection(ctx.data),
-
-      // FIXME: should not have to be user defined
-      errors: ctx.errors,
-    };
+    return flattenConnection(ctx.data);
   },
 });
 
@@ -64,14 +55,17 @@ export const updateUserResolver = createResolver('updateUser', {
 });
 
 export const archiveUserResolver = createResolver('archiveUser', {
-  resolve(args, ctx, next) {
-    ctx.model('user').archive(args.id).then(data => {
-      ctx.data = data;
-      next();
-    });
+  resolve() {
+    throw new Error('This should not throw.');
   },
 
   finalize(ctx) {
     return flattenNode(ctx.data);
+  },
+
+  error(err) {
+    console.log('err.message:', err.message);
+    console.log('err.stack:', err.stack);
+    return err;
   },
 });

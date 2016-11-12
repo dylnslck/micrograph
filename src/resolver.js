@@ -8,24 +8,20 @@ const doesPatternMatch = (pattern, name) => {
   );
 };
 
-const call = (fn, args, ctx, next) => {
+const call = (fn, args, ctx, next, escape) => {
   try {
     const called = fn(args, ctx, () => next(args, ctx));
 
     if (called && typeof called.then === 'function') {
-      called.then(() => next(args, ctx)).catch(err => {
-        ctx.errors.push(err);
-        next(args, ctx);
-      });
+      called.then(() => next(args, ctx)).catch(escape);
     }
   } catch (err) {
-    ctx.errors.push(err);
-    next(args, ctx);
+    escape(err);
   }
 };
 
 class Resolver {
-  constructor(name, { resolve, finalize = (ctx) => ctx }) {
+  constructor(name, { resolve, finalize = (ctx) => ctx, error = (err) => err }) {
     if (typeof name !== 'string') {
       throw new TypeError('Argument "name" must be a string.');
     }
@@ -37,6 +33,7 @@ class Resolver {
     this.name = name;
     this.resolve = resolve;
     this.finalize = finalize;
+    this.error = error;
     this.handle = this.handle.bind(this);
   }
 
@@ -50,7 +47,7 @@ class Resolver {
     };
   }
 
-  handle(stack, args, ctx, done) {
+  handle(stack, args, ctx, done, escape) {
     const { before, after } = this.filterStack(stack);
     const layers = [
       ...before,
@@ -68,10 +65,10 @@ class Resolver {
         return;
       }
 
-      call(layer.fn, mutableArgs, mutableCtx, next);
+      call(layer.fn, mutableArgs, mutableCtx, next, escape);
     };
 
-    next(args, { ...ctx, errors: [] });
+    next({ ...args }, { ...ctx });
   }
 }
 

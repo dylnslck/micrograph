@@ -34,20 +34,6 @@ export default (schema, resolvers, middleware, types) => new GraphQLObjectType({
     const fetchQueryName = `fetch${titleizeType(name)}`;
     const findQueryName = `find${titleizeType(inflection)}`;
 
-    if (!resolvers.hasOwnProperty(fetchQueryName)) {
-      throw new Error(
-        `Tried to build the ${fetchQueryName} root query, but the ${fetchQueryName} resolver ` +
-        'was not found.'
-      );
-    }
-
-    if (!resolvers.hasOwnProperty(findQueryName)) {
-      throw new Error(
-        `Tried to build the ${findQueryName} root query, but the ${findQueryName} resolver ` +
-        'was not found.'
-      );
-    }
-
     return {
       ...prev,
 
@@ -58,6 +44,12 @@ export default (schema, resolvers, middleware, types) => new GraphQLObjectType({
           id: { type: new GraphQLNonNull(GraphQLID) },
         },
         resolve(root, args, ctx) {
+          if (!resolvers.hasOwnProperty(fetchQueryName)) {
+            throw new Error(
+              `The ${fetchQueryName} resolver was never registered.`
+            );
+          }
+
           return handleResolver(args, ctx, resolvers[fetchQueryName], middleware);
         },
       },
@@ -69,6 +61,12 @@ export default (schema, resolvers, middleware, types) => new GraphQLObjectType({
           options: { type: optionsInputType },
         },
         resolve(root, args, ctx) {
+          if (!resolvers.hasOwnProperty(findQueryName)) {
+            throw new Error(
+              `The ${findQueryName} resolver was never registered.`
+            );
+          }
+
           return handleResolver(args, ctx, resolvers[findQueryName], middleware);
         },
       },

@@ -17,6 +17,14 @@ middleware.before('fetchUser', (args, ctx, next) => {
   next();
 });
 
+middleware.before('createUser', () => {
+  throw new Error('I am a big error.');
+});
+
+middleware.before('archiveUser', () => {
+  throw new Error('Not allowed!');
+});
+
 middleware.after((args, ctx, next) => {
   console.log(Date.now() - ctx.startTime);
   next();

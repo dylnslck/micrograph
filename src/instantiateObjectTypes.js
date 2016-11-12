@@ -1,4 +1,8 @@
-import { GraphQLObjectType, GraphQLID } from 'graphql';
+import {
+  GraphQLObjectType,
+  GraphQLID,
+} from 'graphql';
+
 import buildAttributes from './buildAttributes';
 import buildRelationships from './buildRelationships';
 import titleizeType from './titleizeType';
@@ -26,9 +30,12 @@ export default (schema) => {
         description: meta.description || getDefaultDescription(name),
         name: `${titleizeType(name)}`,
         fields: () => ({
-          id: { type: GraphQLID },
+          // dynamic fields
           ...buildAttributes(type),
           ...buildRelationships(type, graphQLObjectTypes),
+
+          // static fields, make sure they aren't overwritten
+          id: { type: GraphQLID },
         }),
       }),
     };
