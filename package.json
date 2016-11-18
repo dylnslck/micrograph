@@ -1,6 +1,6 @@
 {
   "name": "micrograph",
-  "version": "1.0.0-alpha.8",
+  "version": "1.0.0-alpha.9",
   "description": "GraphQL middleware framework",
   "repository": "directlyio/micrograph",
   "main": "dist/index.js",
