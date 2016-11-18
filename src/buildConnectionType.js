@@ -4,7 +4,6 @@ import {
   GraphQLBoolean,
   GraphQLString,
   GraphQLInt,
-  GraphQLNonNull,
 } from 'graphql';
 
 import titleizeType from './titleizeType';
@@ -24,7 +23,6 @@ export default (name, graphQLObjectType) => new GraphQLObjectType({
   fields: {
     pageInfo: { type: PageInfoType },
     totalCount: { type: GraphQLInt },
-    errors: { type: new GraphQLNonNull(new GraphQLList(GraphQLString)) },
     edges: {
       type: new GraphQLList(new GraphQLObjectType({
         name: `${titleizeType(name)}ConnectionEdgeType`,
