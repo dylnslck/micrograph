@@ -1,13 +1,12 @@
 import buildConnectionType from './buildConnectionType';
-import optionsInputType from './optionsInputType';
 
-const connectionTypes = {};
+const cache = {};
 
 export default (type, graphQLObjectTypes) => {
   const { relationships } = type;
 
   return relationships.reduce((prev, relationship) => {
-    const { field, relation, name, resolve } = relationship;
+    const { field, relation, name, resolve, args = {} } = relationship;
 
     if (!resolve) {
       throw new TypeError(
@@ -19,20 +18,18 @@ export default (type, graphQLObjectTypes) => {
     if (relation === 'hasMany') {
       let connectionType;
 
-      if (connectionTypes.hasOwnProperty(field)) {
-        connectionType = connectionTypes[field];
+      if (cache.hasOwnProperty(field)) {
+        connectionType = cache[field];
       } else {
         connectionType = buildConnectionType(field, graphQLObjectTypes[name]);
-        connectionTypes[field] = connectionType;
+        cache[field] = connectionType;
       }
 
       return {
         ...prev,
         [field]: {
           type: connectionType,
-          args: {
-            options: { type: optionsInputType },
-          },
+          args,
           resolve,
         },
       };

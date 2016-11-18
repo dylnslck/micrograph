@@ -5,10 +5,13 @@ import {
   GraphQLInputObjectType,
 } from 'graphql';
 
-import titleizeType from './titleizeType';
+const cache = {};
+const titleize = (str) => `${str[0].toUpperCase()}${str.slice(1)}`;
 
-export default (name, type) => {
-  const { attributes, relationships } = type;
+const creationInputType = (type) => {
+  const { name, attributes, relationships } = type;
+
+  if (cache.hasOwnProperty(name)) return cache[name];
 
   const attributeFields = attributes.reduce((prev, { field, type: attrType }) => ({
     ...prev,
@@ -46,11 +49,15 @@ export default (name, type) => {
     };
   }, {});
 
-  return new GraphQLInputObjectType({
-    name: `${titleizeType(name)}Input`,
+  cache[name] = new GraphQLInputObjectType({
+    name: `${titleize(name)}Input`,
     fields: {
       ...attributeFields,
       ...relationshipFields,
     },
   });
+
+  return cache[name];
 };
+
+export default creationInputType;

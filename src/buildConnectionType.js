@@ -25,7 +25,7 @@ export default (name, graphQLObjectType) => new GraphQLObjectType({
     totalCount: { type: GraphQLInt },
     edges: {
       type: new GraphQLList(new GraphQLObjectType({
-        name: `${titleizeType(name)}ConnectionEdgeType`,
+        name: `${titleizeType(name)}ConnectionEdge`,
         fields: {
           cursor: { type: GraphQLString },
           node: { type: graphQLObjectType },

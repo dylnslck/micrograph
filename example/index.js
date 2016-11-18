@@ -1,49 +1,13 @@
-import { GraphQLString } from 'graphql';
 import redink, { model } from 'redink';
-import Schema, { hasMany, belongsTo } from 'cohere';
 import express from 'express';
 import graphqlHTTP from 'express-graphql';
 
 import { compile } from '../src';
-import flattenConnection from './flattenConnection';
-import flattenNode from './flattenNode';
+import queries from './queries';
+import mutations from './mutations';
 import middleware from './middleware';
+import schema from './schema';
 import * as resolvers from './resolvers';
-
-export const schema = new Schema()
-  .defineType('user', {
-    attributes: {
-      name: GraphQLString,
-      email: GraphQLString,
-    },
-    relationships: {
-      blogs: hasMany('blog', 'author', {
-        resolve(user, args, ctx) {
-          return ctx.model('user').findRelated(user.id, 'blogs').then(flattenConnection);
-        },
-      }),
-    },
-    meta: {
-      inflection: 'users',
-    },
-  })
-  .defineType('blog', {
-    attributes: {
-      title: GraphQLString,
-      content: GraphQLString,
-    },
-    relationships: {
-      author: belongsTo('user', 'blogs', {
-        resolve(blog, args, ctx) {
-          return ctx.model('blog').findRelated(blog.id, 'author').then(flattenNode);
-        },
-      }),
-    },
-    meta: {
-      inflection: 'blogs',
-    },
-  })
-  .compile();
 
 const app = express();
 
@@ -54,7 +18,7 @@ redink().connect({
   db: 'test',
 }).then(() => {
   console.log('Redink connected!'); // eslint-disable-line
-  const compiledSchema = compile(schema, resolvers, middleware);
+  const compiledSchema = compile({ schema, queries, mutations, resolvers, middleware });
 
   app.use('/graphql', graphqlHTTP({
     schema: compiledSchema,
