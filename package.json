@@ -8,7 +8,6 @@
   "license": "MIT",
   "scripts": {
     "build": "npm run clean && mkdirp dist && babel src --out-dir dist",
-    "docs": "babel-node documentation",
     "clean": "rimraf dist coverage .nyc_output",
     "cover": "npm run clean && nyc ava && nyc report --reporter=html && open -a \"Google Chrome\" coverage/index.html",
     "test": "npm run test:lint && npm run test:src",
