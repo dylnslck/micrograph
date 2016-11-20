@@ -1,7 +1,7 @@
 import { GraphQLObjectType } from 'graphql';
 import decorateWithResolvers from './decorateWithResolvers';
 
-export default (schema, queries, resolvers, middleware, types) => {
+export default (schema, queries, middleware, types) => {
   if (!['function', 'object'].includes(typeof queries)) {
     throw new Error(
       'Argument "queries" must either be an object or a function that takes a type as its ' +
@@ -20,7 +20,7 @@ export default (schema, queries, resolvers, middleware, types) => {
 
       return {
         ...prev,
-        ...decorateWithResolvers(invokedQueries, resolvers, middleware, types, name),
+        ...decorateWithResolvers(invokedQueries, middleware, types, name),
       };
     }, {}),
   });

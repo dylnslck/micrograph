@@ -7,7 +7,6 @@ import queries from './queries';
 import mutations from './mutations';
 import middleware from './middleware';
 import schema from './schema';
-import * as resolvers from './resolvers';
 
 const app = express();
 
@@ -18,7 +17,7 @@ redink().connect({
   db: 'test',
 }).then(() => {
   console.log('Redink connected!'); // eslint-disable-line
-  const compiledSchema = compile({ schema, queries, mutations, resolvers, middleware });
+  const compiledSchema = compile({ schema, queries, mutations, middleware });
 
   app.use('/graphql', graphqlHTTP({
     schema: compiledSchema,

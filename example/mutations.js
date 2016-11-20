@@ -5,6 +5,7 @@ import {
 } from 'graphql';
 
 import creationInputType from './creationInputType';
+import flattenNode from './flattenNode';
 import titleize from './titleize';
 
 export default (type) => ({
@@ -12,6 +13,23 @@ export default (type) => ({
     description: `Creates a ${type.name}.`,
     args: {
       input: { type: creationInputType(type) },
+    },
+    actions: {
+      resolve(args, ctx, next) {
+        ctx.model(type.name).create(args.input).then(data => {
+          ctx.data = data;
+          next();
+        });
+      },
+
+      finalize(ctx) {
+        return flattenNode(ctx.data);
+      },
+
+      error(err) {
+        // eslint-disable-next-line
+        console.log('Error logger!:', err);
+      },
     },
   },
 
@@ -21,12 +39,46 @@ export default (type) => ({
       input: { type: creationInputType(type) },
       id: { type: new GraphQLNonNull(GraphQLID) },
     },
+    actions: {
+      resolve(args, ctx, next) {
+        ctx.model(type.name).update(args.id, args.input).then(data => {
+          ctx.data = data;
+          next();
+        });
+      },
+
+      finalize(ctx) {
+        return flattenNode(ctx.data);
+      },
+
+      error(err) {
+        // eslint-disable-next-line
+        console.log('Error logger!:', err);
+      },
+    },
   },
 
-  [`delete${titleize(type.name)}`]: {
+  [`archive${titleize(type.name)}`]: {
     description: `Deletes a ${type.name}.`,
     args: {
       id: { type: new GraphQLNonNull(GraphQLID) },
+    },
+    actions: {
+      resolve(args, ctx, next) {
+        ctx.model(type.name).fetch(args.id)
+          .then(node => node.archive())
+          .then(node => (ctx.data = node))
+          .then(next);
+      },
+
+      finalize(ctx) {
+        return flattenNode(ctx.data);
+      },
+
+      error(err) {
+        // eslint-disable-next-line
+        console.log('Error logger!:', err);
+      },
     },
   },
 
@@ -41,14 +93,50 @@ export default (type) => ({
           [`append${titleize(type.meta.inflection)}${titleize(field)}`]: {
             description: 'Appends ids.',
             args: {
-              ids: { type: new GraphQLNonNull(new GraphQLList(GraphQLID)) },
+              id: { type: new GraphQLNonNull(GraphQLID) },
+              nodes: { type: new GraphQLNonNull(new GraphQLList(GraphQLID)) },
+            },
+            actions: {
+              resolve(args, ctx, next) {
+                ctx.model(type.name).fetch(args.id)
+                  .then(node => node.push(field, args.nodes))
+                  .then(node => (ctx.data = node))
+                  .then(next);
+              },
+
+              finalize(ctx) {
+                return flattenNode(ctx.data);
+              },
+
+              error(err) {
+                // eslint-disable-next-line
+                console.log('Error logger!:', err);
+              },
             },
           },
 
           [`splice${titleize(type.meta.inflection)}${titleize(field)}`]: {
             description: 'Splice ids.',
             args: {
-              ids: { type: new GraphQLNonNull(new GraphQLList(GraphQLID)) },
+              id: { type: new GraphQLNonNull(GraphQLID) },
+              nodes: { type: new GraphQLNonNull(new GraphQLList(GraphQLID)) },
+            },
+            actions: {
+              resolve(args, ctx, next) {
+                ctx.model(type.name).fetch(args.id)
+                  .then(node => node.put(field, args.nodes))
+                  .then(node => (ctx.data = node))
+                  .then(next);
+              },
+
+              finalize(ctx) {
+                return flattenNode(ctx.data);
+              },
+
+              error(err) {
+                // eslint-disable-next-line
+                console.log('Error logger!:', err);
+              },
             },
           },
         };
@@ -57,10 +145,28 @@ export default (type) => ({
         return {
           ...accumulator,
 
-          [`set${titleize(type.meta.inflection)}${titleize(field)}`]: {
+          [`put${titleize(type.meta.inflection)}${titleize(field)}`]: {
             description: 'Sets an id.',
             args: {
               id: { type: new GraphQLNonNull(GraphQLID) },
+              node: { type: new GraphQLNonNull(GraphQLID) },
+            },
+            actions: {
+              resolve(args, ctx, next) {
+                ctx.model(type.name).fetch(args.id)
+                  .then(node => node.put(field, args.node))
+                  .then(node => (ctx.data = node))
+                  .then(next);
+              },
+
+              finalize(ctx) {
+                return flattenNode(ctx.data);
+              },
+
+              error(err) {
+                // eslint-disable-next-line
+                console.log('Error logger!:', err);
+              },
             },
           },
 
@@ -68,6 +174,24 @@ export default (type) => ({
             description: 'Removes an id.',
             args: {
               id: { type: new GraphQLNonNull(GraphQLID) },
+              node: { type: new GraphQLNonNull(GraphQLID) },
+            },
+            actions: {
+              resolve(args, ctx, next) {
+                ctx.model(type.name).fetch(args.id)
+                  .then(node => node.remove(field, args.node))
+                  .then(node => (ctx.data = node))
+                  .then(next);
+              },
+
+              finalize(ctx) {
+                return flattenNode(ctx.data);
+              },
+
+              error(err) {
+                // eslint-disable-next-line
+                console.log('Error logger!:', err);
+              },
             },
           },
         };

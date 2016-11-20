@@ -1,9 +1,10 @@
 import buildConnectionType from './buildConnectionType';
 import handleResolver from './handleResolver';
+import createResolver from './resolver';
 
-export default (queriesOrMutations, resolvers, middleware, types, name) =>
+export default (queriesOrMutations, middleware, types, name) =>
   Object.keys(queriesOrMutations).reduce((accumulator, key) => {
-    const { description, args, isPlural } = queriesOrMutations[key];
+    const { description, args, actions, isPlural } = queriesOrMutations[key];
 
     const type = isPlural
       ? buildConnectionType(name, types[name])
@@ -16,13 +17,16 @@ export default (queriesOrMutations, resolvers, middleware, types, name) =>
         args,
         type,
         resolve(root, mutableArgs, mutableCtx) {
-          if (!resolvers.hasOwnProperty(key)) {
+          const { resolve, finalize, error } = actions;
+
+          if (resolve && typeof resolve !== 'function') {
             throw new Error(
-              `The ${key} resolver was never registered.`
+              `The ${key} resolve method must be a function.`
             );
           }
 
-          return handleResolver(mutableArgs, mutableCtx, resolvers[key], middleware);
+          const resolver = createResolver(key, { resolve, finalize, error });
+          return handleResolver(mutableArgs, mutableCtx, resolver, middleware);
         },
       },
     };
