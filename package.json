@@ -10,6 +10,7 @@
     "build": "npm run clean && mkdirp dist && babel src --out-dir dist",
     "clean": "rimraf dist coverage .nyc_output",
     "cover": "npm run clean && nyc ava && nyc report --reporter=html && open -a \"Google Chrome\" coverage/index.html",
+    "docs:publish": "cd docs && rimraf _book && gitbook build && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push https://github.com/directlyio/micrograph.git gh-pages --force",
     "test": "npm run test:lint && npm run test:src",
     "test:lint": "eslint src test",
     "test:src": "nyc ava && nyc report --reporter=lcov",
@@ -32,6 +33,7 @@
     "eslint-plugin-react": "^5.2.2",
     "express": "^4.14.0",
     "express-graphql": "^0.5.4",
+    "gitbook-cli": "^2.3.0",
     "nyc": "^9.0.1",
     "redink": "next"
   },
