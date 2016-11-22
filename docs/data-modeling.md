@@ -1,18 +1,18 @@
 # Data modeling
 
 ## Cohere
-Micrograph uses Cohere for modeling data.
+Micrograph uses [cohere](https://github.com/directlyio/cohere) for modeling data.
 
-Cohere is a simple schema lib that is concerned with **attributes** and **relationships**. Cohere supports "bring-your-own-typing" for attributes (such as GraphQL scalar types). Micrograph requires that you use GraphQL scalar types for attributes, but if you choose to use Cohere for a different project, you can use arbitrary typing (or none at all).
+`cohere` is a simple schema lib that is concerned with **attributes** and **relationships**. `cohere` supports "bring-your-own-typing" for attributes (such as GraphQL scalar types). Micrograph requires that you use GraphQL scalar types for attributes, but if you choose to use `cohere` for a different project, you can use arbitrary typing (or none at all).
 
-```
+```sh
 npm install --save cohere
 ```
 
 ### Relationships
-Cohere is opiniated with relationships. It supports **hasMany**, **belongsTo**, and **hasOne**.
+`cohere` is opiniated with relationships. It supports **hasMany**, **belongsTo**, and **hasOne**.
 
-### hasMany(type: String, inverse: String, options: Object)
+### `hasMany(type, inverse, options)`
 The `hasMany` relationship is used for **1:N** or **M:N** relationships. For example, a user might have many blogs. In another example, a teacher might have many students and vice versa.
 
 ```javascript
@@ -75,8 +75,8 @@ Micrograph will generate an `author` field on the `Blog` type that points to a `
 
 What's the difference between `belongsTo` and `hasOne`?
 
-Nothing, really. They both represent **1:1** relationships, and Cohere includes both mainly for use the database layer. For example, we typically use `belongsTo` on a piece of data that we consider to be **dependent**. In other words, the existence of a `blog` depends on the existence of a `user`. A blog cannot exist without an author. In contrast, a `user` might have a `company` relationship:
-```
+Nothing, really. They both represent **1:1** relationships, and `cohere` includes both mainly for use by the database layer. For example, we typically use `belongsTo` on a piece of data that we consider to be **dependent**. In other words, the existence of a `blog` depends on the existence of a `user`. A blog cannot exist without an author. In contrast, a `user` might have a `company` relationship:
+```javascript
 ...
 relationships: {
   blogs: ...,
@@ -86,14 +86,15 @@ relationships: {
 ```
 In this example, it doesn't make sense for a `user` to belong to a company because a user might be unemployed. We're stating that a `user` may only ever have **0** or **1** company at a time.
 
-Micrograph handles `belongsTo` and `hasOne` relationships identically, and their use cases are left to the developer. For example, you might use `belongsTo` or `hasOne` to specify which table has the foreign key, or which NoSQL collection has an index.
+Micrograph handles `belongsTo` and `hasOne` relationships identically, and their use cases are left to the developer. For example, you might use `belongsTo` or `hasOne` to specify which table has the foreign key, how cascade deletion works, or which NoSQL collection has an index.
 
 ### Resolving relationships
 Micrograph requires that every relationship's third argument is an object. This object must have a `resolve` function and an optional `args` object.
 
-### .resolve(parent, args, ctx)
+### `resolve(parent, args, ctx)`
 The `resolve` function does the majority of the work. Almost always, it will retrieve data from a database.
-```
+
+```javascript
 ...
 relationships: {
   blogs: hasMany('blog', 'author', {
@@ -106,10 +107,12 @@ relationships: {
 },
 ...
 ```
+
 Once we get the data from the database, we mutate `ctx` so that it can be consumed by `finalize`.
-### .args
+### `args`
 You can specify arguments to be used by `resolve` just like normal:
-```
+
+```javascript
 ...
 relationships: {
   blogs: hasMany('blog', 'author', {
@@ -125,9 +128,11 @@ relationships: {
 },
 ...
 ```
+
 When resolving fields, you must make sure the retrieved data has the proper shape.
 
 For example, if our database service returns data in a top-level `data` key, our example above needs to be modified:
+
 ```
 ...
 relationships: {

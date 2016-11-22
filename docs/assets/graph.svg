@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="300px" height="150px" viewBox="0 0 300 150" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41 (35326) - http://www.bohemiancoding.com/sketch -->
+    <title>Artboard 3</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard-3">
+            <circle id="Oval-2" stroke="#5C7CFA" stroke-width="2" cx="17" cy="133" r="4"></circle>
+            <path d="M35,117.840276 L170.637808,118.611242" id="Line-Copy-2" stroke="#20C997" stroke-width="2" stroke-linecap="round" transform="translate(102.818904, 118.225759) scale(1, -1) translate(-102.818904, -118.225759) "></path>
+            <path d="M20.0396395,25.483397 L150,129.872155" id="Line-Copy" stroke="#5C7CFA" stroke-width="2" stroke-linecap="round" transform="translate(85.019820, 77.677776) scale(1, -1) translate(-85.019820, -77.677776) "></path>
+            <text id="Application-complexi" font-family="Avenir-Medium, Avenir" font-size="12" font-weight="400" fill="#5C7CFA">
+                <tspan x="22" y="47">Application</tspan>
+                <tspan x="22" y="63">complexity</tspan>
+            </text>
+            <text id="Application-boilerpl" font-family="Avenir-Medium, Avenir" font-size="12" font-weight="400" fill="#20C997">
+                <tspan x="187" y="101">Application</tspan>
+                <tspan x="187" y="117">boilerplate and</tspan>
+                <tspan x="187" y="133">bookkeeping</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

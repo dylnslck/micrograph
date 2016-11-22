@@ -44,12 +44,6 @@ test('should fail to compile with invalid args', t => {
   } catch (err) {
     t.is(err.message, 'Option "queries" must be a function');
   }
-
-  try {
-    compile({ schema: {}, queries: () => null });
-  } catch (err) {
-    t.is(err.message, 'Option "mutations" must be a function');
-  }
 });
 
 test('should throw an error because input.blogs is required', async t => {

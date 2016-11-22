@@ -1,9 +1,9 @@
 # API
-## .compile()
+### `.compile(schema, queries, mutations, [middleware])`
 
 Micrograph's main export is `compile`. `compile` transforms:
 
-1. A Cohere schema
+1. A `cohere` schema
 2. A queries mapping
 3. A mutations mapping
 4. Middleware
@@ -23,14 +23,12 @@ export default compile(schema, queries, mutations, middleware);
 
 Then somewhere in your application:
 
-```
+```javascript
 import express from 'express';
 import graphqlHTTP from 'express-graphql';
 import schema from './compiled';
 
 const app = express();
-app.use('/graphql, graphqlHTTP({ schema });
+app.use('/graphql', graphqlHTTP({ schema });
 app.listen(4000);
 ```
-
-
