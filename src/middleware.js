@@ -39,4 +39,5 @@ class Middleware {
   }
 }
 
+/* istanbul ignore next */
 export default (...args) => new Middleware(...args);

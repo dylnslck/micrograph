@@ -21,7 +21,7 @@ const call = (fn, args, ctx, next, escape) => {
 };
 
 class Resolver {
-  constructor(name, { resolve, finalize = (ctx) => ctx, error = (err) => err }) {
+  constructor(name, { resolve, finalize = (ctx) => ctx, error = (err) => err } = {}) {
     if (typeof name !== 'string') {
       throw new TypeError('Argument "name" must be a string.');
     }
@@ -72,4 +72,5 @@ class Resolver {
   }
 }
 
+/* istanbul ignore next */
 export default (...args) => new Resolver(...args);

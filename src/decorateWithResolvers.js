@@ -6,6 +6,12 @@ export default (queriesOrMutations, middleware, types, name) =>
   Object.keys(queriesOrMutations).reduce((accumulator, key) => {
     const { description, args, actions, isPlural } = queriesOrMutations[key];
 
+    if (typeof actions !== 'object') {
+      throw new TypeError(
+        'You must supply an actions object with each root query and root mutation.'
+      );
+    }
+
     const type = isPlural
       ? buildConnectionType(name, types[name])
       : types[name];

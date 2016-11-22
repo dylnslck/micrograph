@@ -1,11 +1,32 @@
 import test from 'ava';
-import { createResolver, createMiddleware } from '../src';
+import { createMiddleware } from '../src';
+import createResolver from '../src/resolver';
 
 const argsAreValid = (t, args, ctx, next) => {
   t.is(typeof args, 'object');
   t.is(typeof ctx, 'object');
   t.is(typeof next, 'function');
 };
+
+test('should fail to create a resolver with invalid args', t => {
+  try {
+    createResolver();
+  } catch (err) {
+    t.is(err.message, 'Argument "name" must be a string.');
+  }
+
+  try {
+    createResolver('createUser');
+  } catch (err) {
+    t.is(err.message, 'Argument "resolve" must be a function.');
+  }
+
+  try {
+    createResolver('createUser', {});
+  } catch (err) {
+    t.is(err.message, 'Argument "resolve" must be a function.');
+  }
+});
 
 test('should run asnyc/sync middleware in order with valid patterns', async t => {
   const userResolver = createResolver('createUser', {
