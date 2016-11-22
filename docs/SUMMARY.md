@@ -8,5 +8,5 @@
    * [4. Wire everything together](tutorial/wire-everything-together.md)
 * [Data modeling](data-modeling.md)
 * [API](api-reference.md)
-   * [.compile](api/compile.md)
-   * [.createMiddleware](api/create-middleware.md)
+   * [compile](api/compile.md)
+   * [createMiddleware](api/create-middleware.md)

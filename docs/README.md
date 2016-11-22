@@ -34,5 +34,5 @@ Now, we need to define the schema, queries, mutations, and middleware. These ste
   4. [Wire everything together](tutorial/wire-everything-together.md)
 2. [Data modeling](data-modeling.md)
 3. [API](api-reference.md)
-  1. [.compile](api/compile.md)
-  2. [.createMiddleware](api/create-middleware.md)
+  1. [compile](api/compile.md)
+  2. [createMiddleware](api/create-middleware.md)

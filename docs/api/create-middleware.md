@@ -117,4 +117,4 @@ Query and mutation error handlers are defined next to the `resolve` and `finaliz
 },
 ```
 
-Make sure to return `err` (or a transformed one). The returned `err` is sent to the client. This is a good place to log or transform errors. For example, this is where you'll want to hide error stack traces from the client in production environments.
+Make sure to return `err` (or a transformed one). The returned `err` is sent to the client. This is a good place to log or transform errors.
