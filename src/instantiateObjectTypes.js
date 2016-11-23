@@ -8,7 +8,7 @@ import buildAttributes from './buildAttributes';
 import buildRelationships from './buildRelationships';
 import titleizeType from './titleizeType';
 
-const getDefaultDescription = (name) => `The ${titleizeType(name)} Cohere model.`;
+const getDefaultDescription = (name) => `The ${titleizeType(name)} model.`;
 const typeCache = {};
 
 export default (schema) => {
