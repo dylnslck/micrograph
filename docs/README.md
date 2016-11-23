@@ -2,7 +2,7 @@
 # Micrograph
 ![](https://travis-ci.org/directlyio/micrograph.svg?branch=master) [![codecov](https://codecov.io/gh/directlyio/micrograph/branch/master/graph/badge.svg)](https://codecov.io/gh/directlyio/micrograph)
 
-Micrograph is small (~375 LOC) middle framework for developing large GraphQL applications with complex business logic. Micrograph utilizes type-to-query and type-to-mutation mappings that enable applications to scale without boilerplate and GraphQL bookkeeping.
+Micrograph is a small (~375 LOC) middle framework for developing large GraphQL applications with complex business logic. Micrograph utilizes type-to-query and type-to-mutation mappings that enable applications to scale without boilerplate and GraphQL bookkeeping.
 
 ## Motivation {#motivation}
 Large GraphQL schemas quickly become cumbersome and hard to manage. Duplication invariably occurs across different GraphQL object types and creating and maintaining a [DRY](https://en.wikipedia.org/wiki/Don't_repeat_yourself) GraphQL codebase is rather difficult. Additionally, the GraphQL documentation doesn't cover complex middleware outside of basic Express authentication. Micrograph offers a structured way to build complex middleware and to handle business-logic specific errors.
@@ -17,7 +17,7 @@ For example, let's say your data model includes users and blogs. You'll build th
 Your app's complexity can grow without worrying about creating new GraphQL input types, object types, etc.
 
 ## Getting started {#getting-started}
-First, install the Micrograph package. Micrograph relies on the [cohere]([cohere](https://github.com/directlyio/cohere) schema library, so install that as well. `cohere` is a simple ~250 LOC schema lib.
+First, install the Micrograph package. Micrograph relies on the [cohere](https://github.com/directlyio/cohere) schema library, so install that as well. `cohere` is a simple ~250 LOC schema lib.
 
 ```sh
 npm install micrograph --save
