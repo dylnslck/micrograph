@@ -5,7 +5,7 @@ In order to define your root queries and mutations, you need to create a functio
 ## `queries.js`
 
 ```javascript
-import { GraphQLNonNull, GraphQLID } from 'graphql';
+import { GraphQLNonNull, GraphQLID, GraphQLList } from 'graphql';
 
 // convert user -> User
 const titleize = (str) => `${str[0].toUpperCase()}${str.slice(1)}`;
@@ -21,11 +21,12 @@ export default (type) => ({
         .then(data => ctx.data = data)
         .then(next),
       finalize: (ctx) => ctx.data,
+      error: (err) => console.log(err),
     },
   },
   // findUsers and findBlogs
   [`find${titleize(type.name)}s`]: {
-      isPlural: true,
+      output: GraphQLList,
       description: `Finds all ${type.name} types`,
       actions: {
         resolve: (args, ctx, next) => ctx.db(type.name)
@@ -33,13 +34,22 @@ export default (type) => ({
           .then(data => ctx.data = data)
           .then(next),
         finalize: (ctx) => ctx.data,
+        error: (err) => console.log(err),
       },
     },
   },
 });
 ```
 
-Every type defined in `schema.js` is mapped to the following queries: **fetchUser**, **fetchBlog**, **findUsers**, and **findBlogs**. Micrograph expects the exported function to return an object whose keys are the root query names and whose values are an object with optional `description`, `args`, and `isPlural` keys. The `isPlural` key is required **if** your query is expected to return multiple object types. The fourth key `actions` has a required `resolve` key and optional `finalize` and `error` keys.
+Every type defined in `schema.js` is mapped to the following queries: **fetchUser**, **fetchBlog**, **findUsers**, and **findBlogs**. Micrograph expects the exported function to return an object whose keys are the root query names and whose values are an object with optional `description`, `args`, and `output` keys. The fourth key `actions` has a required `resolve` key and optional `finalize` and `error` keys.
+
+1. `description` is the GraphQL description
+2. `args` is a valid GraphQL args object
+3. `output` is a valid GraphQL wrapper (like GraphQLList) or a function that takes in a GraphQL object type and returns an output type, i.e. `output: (type) => new GraphQLList(type)`
+4. `actions` is an object of methods used for resolving, preparing responses, and handling errors
+  1. `resolve` is the method (located in the middle of the middleware chain) that handles data fetching
+  2. `finalize` is the method that transforms `ctx` into an object that matches the output type
+  3. `error` is error handler
 
 ## `mutations.js`
 

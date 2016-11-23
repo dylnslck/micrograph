@@ -7,7 +7,7 @@ The following is an example of a basic schema. Refer to the [data modeling](../d
 ```javascript
 // schema.js
 import Schema, { hasMany, belongsTo } from 'cohere';
-import { GraphQLString, GraphQLNonNull } from 'graphql';
+import { GraphQLString, GraphQLNonNull, GraphQLList } from 'graphql';
 
 const schema = new Schema();
 
@@ -18,6 +18,7 @@ schema.defineType('user', {
   },
   relationships: {
     blogs: hasMany('blog', 'author', {
+      output: GraphQLList,
       resolve(user, args, ctx) {
         return ctx.db.getUsersBlogs(user.id);    
       },
