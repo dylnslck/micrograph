@@ -8,9 +8,9 @@ Micrograph is a small (~375 LOC) middle framework for developing large GraphQL a
 Large GraphQL schemas quickly become cumbersome and hard to manage. Duplication invariably occurs across different GraphQL object types and creating and maintaining a [DRY](https://en.wikipedia.org/wiki/Don't_repeat_yourself) GraphQL codebase is rather difficult. Additionally, the GraphQL documentation doesn't cover complex middleware outside of basic Express authentication. Micrograph offers a structured way to build complex middleware and to handle business-logic specific errors.
 
 ## The gist {#the-gist}
-Getting started with Micrograph requires two files: `schema.js` and `queries.js`. You can optionally create two more files: `mutations.js` and `middleware.js`. Micrograph compiles these four files into a `GraphQLSchema` that can be plugged into your favorite GraphQL server library. These files enable your application to grow by focusing on things that matter, such as middleware and additional schema types.
+Getting started with Micrograph requires the creation of two files: `schema.js` and `queries.js`. You can optionally create two more files: `mutations.js` and `middleware.js`. The [tutorial](tutorial.md) explains creating these files. Micrograph compiles these four files into a `GraphQLSchema` that can be plugged into your favorite GraphQL server library. These files enable your application to grow by focusing on things that matter, such as middleware and additional schema types.
 
-For example, let's say your data model includes users and blogs. You'll build the four files specified above and launch. A week later, you decide to add more types to your data model. With Micrograph, you simply need to edit `schema.js` and add some more middleware hooks if you choose.
+For example, let's say your data model includes users and blogs. You'll [define your schema](tutorial/define-the-schema.md), [create some root queries and mutations](tutorial/root-queries-and-mutations.md), and specify some [middleware](tutorial/middleware.md). A week later, you decide to add more types to your data model. With Micrograph, you simply need to edit your `schema.js` and add some more middleware hooks if you choose.
 
 ![](assets/graph.svg)
 
@@ -20,8 +20,7 @@ Your app's complexity can grow without worrying about creating new GraphQL input
 First, install the Micrograph package. Micrograph relies on the [cohere](https://github.com/directlyio/cohere) schema library, so install that as well. `cohere` is a simple ~250 LOC schema lib.
 
 ```sh
-npm install micrograph --save
-npm install cohere --save
+npm install micrograph cohere graphql --save
 ```
 
 Now, we need to define the schema, queries, mutations, and middleware. These steps are outlined in the tutorial.

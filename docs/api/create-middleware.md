@@ -101,20 +101,48 @@ middleware.before('createUser', (args, ctx, next) => {
 });
 ```
 
-### Using the error handler
-Query and mutation error handlers are defined next to the `resolve` and `finalize` hooks:
+### Error handling
+
+You can break out of a middleware chain (including inside of a resolve method) by either throwing an error or returning a rejected promise.
+
+```javascript
+middleware.before('createUser', (args, ctx, next) => {
+  // throwing an error will break out of the middleware chain
+  throw new Error('Oh no!');
+});
+```
+
+or
+
+```javascript
+middleware.before('createUser', (args, ctx) => {
+  return new Promise((resolve, reject) => {
+    reject(new Error('Oh no!'));
+  });
+});
+```
+
+Query and mutation error handlers are defined in the `error` key next to the `resolve` and `finalize` hooks.
 
 ```javascript
 // mutations.js
-[`create${type.name}`]: {
-  resolve: ...,
-  finalize: ...,
+...
+[`create${titleize(type.name)}`]: {
+  description: ...,
+  args: ...,
+  actions: {
+    resolve: ...,
+    finalize: ...,
 
-  error(err) {
-    // do something with the error
-    return err;
+    // add an optional error key to catch errors before
+    // its sent to the client
+    error(err) {
+      console.log(err.message); // Oh no!
+      return err;
+    },
   },
 },
+...
 ```
 
 Make sure to return `err` (or a transformed one). The returned `err` is sent to the client. This is a good place to log or transform errors.

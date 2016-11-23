@@ -1,8 +1,8 @@
 # Define the schema
 
-Micrograph uses the [cohere](https://github.com/directlyio/cohere) schema lib. `cohere` is a tiny lib that compiles attributes and relationships to a JSON that is easily transformed into a GraphQL schema, among other things.
+Micrograph uses the [cohere](https://github.com/directlyio/cohere) schema lib. `cohere` is a tiny lib that compiles attributes and relationships to JSON that is easily transformed into a GraphQL schema, among other things.
 
-The following is an example of a basic schema. Refer to the [data modeling](../data-modeling.md) section for more information on creating schemas.
+The following is an example of a basic schema. Refer to the [data modeling](../data-modeling.md) section for more information on creating schemas. We're using [GraphQL scalar types for attributes](http://graphql.org/graphql-js/type/).
 
 ```javascript
 // schema.js
@@ -44,7 +44,7 @@ schema.compile();
 export default schema;
 ```
 
-Cohere offers three relationship types: **hasMany**, **belongsTo**, and **hasOne**. For each relationship, the first argument is the **type** that the relationship refers to, i.e. the user's blogs relationship points to the **blog** type. The second argument is the **inverse field**. For example, the schema above declares that the **author** relationship of a **blog** points to the **user** type and that the **user **type has a **blogs** relationship that points back towards the **blog **type.
+`cohere` offers three relationship types: **hasMany**, **belongsTo**, and **hasOne**. For each relationship, the first argument is the **type** that the relationship refers to, i.e. the user's blogs relationship points to the **blog** type. The second argument is the **inverse field**. For example, the schema above declares that the **author** relationship of a **blog** points to the **user** type and that the **user **type has a **blogs** relationship that points back towards the **blog **type.
 
 The third argument is an object. Micrograph requires the third argument to have a **resolve** key, which the exact same resolve function that GraphQL uses to reconcile field data. In the above example, we're pretending that the **ctx** object has a **db** class that handles fetching data.
 

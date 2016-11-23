@@ -68,7 +68,7 @@ middleware.before('*', (args, ctx) => {
 });
 ```
 
-In order to avoid unpredictable behavior, avoid invoking `next` inside a Promise.
+There are a few gotcha, such as avoiding `next` inside a Promise. Refer to the [create middleware docs](../api/create-middleware).
 
 ### Error handling
 
@@ -89,27 +89,6 @@ middleware.before('createUser', (args, ctx) => {
     reject(new Error('Oh no!'));
   });
 });
-```
-
-You then have an opportunity to catch any errors in `mutations.js`:
-
-```javascript
-// the following code is taken from mutations.js
-[`create${titleize(type.name)}`]: {
-  description: ...,
-  args: ...,
-  actions: {
-    resolve: ...,
-    finalize: ...,
-
-    // add an optional error key to catch errors before
-    // its sent to the client
-    error(err) {
-      console.log(err.message); // Oh no!
-      return err;
-    },
-  },
-},
 ```
 
 Refer to the [api reference](../api/create-middleware.md) for more information on chaining middleware and handling errors.

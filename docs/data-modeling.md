@@ -38,22 +38,16 @@ export default new Schema()
   })
   .compile();
 ```
-Micrograph will generate a `BlogConnection` type. For more information on Connections, refer to the [Relay Connection docs](https://facebook.github.io/relay/docs/graphql-connections.html#content). For example, a GraphQL query might then look like:
+
+For example, a GraphQL query might then look like:
+
 ```
 query getUsersBlogs {
   fetchUser(id: "1") {
     name
     blogs {
-      totalCount,
-      pageInfo {
-        hasNextPage
-        startCursor
-      }
-      edges {
-        node {
-          title
-        }
-      }
+      id
+      title
     }
   }
 }
