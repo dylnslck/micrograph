@@ -13,24 +13,9 @@ export default new Schema()
         args: {
           title: { type: GraphQLString },
         },
-        resolve(user) {
-          const ids = db().get('user', user.id).blogs;
-
-          if (!ids) {
-            return {
-              totalCount: 0,
-              edges: [],
-            };
-          }
-
-          const blogs = ids
-            .map(blog => db().get('blog', blog))
-            .map(blog => ({ node: blog }));
-
-          return {
-            totalCount: blogs.length,
-            edges: blogs,
-          };
+        resolve({ blogs }) {
+          if (!blogs) return [];
+          return blogs.map(id => db().get('blog', id));
         },
       }),
     },

@@ -1,10 +1,9 @@
-import buildConnectionType from './buildConnectionType';
 import handleResolver from './handleResolver';
 import createResolver from './resolver';
 
 export default (queriesOrMutations, middleware, types, name) =>
   Object.keys(queriesOrMutations).reduce((accumulator, key) => {
-    const { description, args, actions, isPlural } = queriesOrMutations[key];
+    const { description, args, actions, output: OutputType } = queriesOrMutations[key];
 
     if (typeof actions !== 'object') {
       throw new TypeError(
@@ -12,8 +11,8 @@ export default (queriesOrMutations, middleware, types, name) =>
       );
     }
 
-    const type = isPlural
-      ? buildConnectionType(name, types[name])
+    const type = OutputType
+      ? new OutputType(types[name])
       : types[name];
 
     return {

@@ -1,12 +1,10 @@
-import buildConnectionType from './buildConnectionType';
-
-const cache = {};
+import { GraphQLList } from 'graphql';
 
 export default (type, graphQLObjectTypes) => {
   const { relationships } = type;
 
   return relationships.reduce((prev, relationship) => {
-    const { field, relation, name, resolve, args = {} } = relationship;
+    const { field, relation, name, resolve, output: OutputType, args = {} } = relationship;
 
     if (!resolve) {
       throw new TypeError(
@@ -16,29 +14,32 @@ export default (type, graphQLObjectTypes) => {
     }
 
     if (relation === 'hasMany') {
-      let connectionType;
-
-      if (cache.hasOwnProperty(field)) {
-        connectionType = cache[field];
-      } else {
-        connectionType = buildConnectionType(field, graphQLObjectTypes[name]);
-        cache[field] = connectionType;
-      }
+      const outputType = (
+        OutputType &&
+        new OutputType(graphQLObjectTypes[name]) ||
+        new GraphQLList(graphQLObjectTypes[name])
+      );
 
       return {
         ...prev,
         [field]: {
-          type: connectionType,
+          type: outputType,
           args,
           resolve,
         },
       };
     }
 
+    const outputType = (
+      OutputType &&
+      new OutputType(graphQLObjectTypes[name]) ||
+      graphQLObjectTypes[name]
+    );
+
     return {
       ...prev,
       [field]: {
-        type: graphQLObjectTypes[name],
+        type: outputType,
         resolve,
       },
     };

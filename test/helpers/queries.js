@@ -1,4 +1,4 @@
-import { GraphQLID } from 'graphql';
+import { GraphQLID, GraphQLList } from 'graphql';
 import errorLogger from './errorLogger';
 import db from './database';
 
@@ -14,12 +14,9 @@ export default (type) => ({
     },
   },
   [`all${type.name}s`]: {
-    isPlural: true,
+    output: GraphQLList,
     actions: {
-      finalize: (ctx) => ({
-        totalCount: ctx.res.data.length,
-        edges: ctx.res.data.map(node => ({ node })),
-      }),
+      finalize: (ctx) => ctx.res.data,
       error: (err) => errorLogger().add(err),
       resolve: (args, ctx, next) => db().getAll(type.name)
         .then(res => (ctx.res = res))
