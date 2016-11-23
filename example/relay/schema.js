@@ -1,8 +1,8 @@
 import { GraphQLString } from 'graphql';
+import { connectionDefinitions, connectionArgs } from 'graphql-relay';
 import Schema, { hasMany, belongsTo } from 'cohere';
 import flattenConnection from './flattenConnection';
 import flattenNode from './flattenNode';
-import optionsInputType from './optionsInputType';
 
 export default new Schema()
   .defineType('user', {
@@ -12,15 +12,11 @@ export default new Schema()
     },
     relationships: {
       blogs: hasMany('blog', 'author', {
-        args: {
-          options: { type: optionsInputType },
-        },
-
-        resolve(user, args, ctx) {
-          return ctx.model('user')
-            .findRelated(user.id, 'blogs', args.options)
-            .then(flattenConnection);
-        },
+        args: connectionArgs,
+        output: (type) => connectionDefinitions({ nodeType: type }).connectionType,
+        resolve: (user, args, ctx) => ctx.model('user')
+          .findRelated(user.id, 'blogs', args.options)
+          .then(flattenConnection),
       }),
     },
     meta: {
@@ -34,11 +30,9 @@ export default new Schema()
     },
     relationships: {
       author: belongsTo('user', 'blogs', {
-        resolve(blog, args, ctx) {
-          return ctx.model('blog')
-            .findRelated(blog.id, 'author')
-            .then(flattenNode);
-        },
+        resolve: (blog, args, ctx) => ctx.model('blog')
+          .findRelated(blog.id, 'author')
+          .then(flattenNode),
       }),
     },
     meta: {

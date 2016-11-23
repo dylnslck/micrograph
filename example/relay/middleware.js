@@ -1,4 +1,4 @@
-import { createMiddleware } from '../src';
+import { createMiddleware } from '../../src';
 
 const middleware = createMiddleware();
 

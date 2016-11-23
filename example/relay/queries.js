@@ -1,20 +1,14 @@
-import {
-  GraphQLNonNull,
-  GraphQLID,
-} from 'graphql';
-
-import optionsInputType from './optionsInputType';
+import { GraphQLNonNull, GraphQLID } from 'graphql';
+import { connectionDefinitions, connectionArgs } from 'graphql-relay';
 import flattenConnection from './flattenConnection';
 import flattenNode from './flattenNode';
 import titleize from './titleize';
 
 export default (type) => ({
   [`find${titleize(type.meta.inflection)}`]: {
-    isPlural: true,
+    output: (nodeType) => connectionDefinitions({ nodeType }).connectionType,
     description: `Finds all ${type.meta.inflection}.`,
-    args: {
-      options: { type: optionsInputType },
-    },
+    args: connectionArgs,
     actions: {
       resolve(args, ctx, next) {
         ctx.model(type.name).find(args.options).then(data => {

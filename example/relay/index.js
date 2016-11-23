@@ -2,7 +2,7 @@ import redink, { model } from 'redink';
 import express from 'express';
 import graphqlHTTP from 'express-graphql';
 
-import { compile } from '../src';
+import { compile } from '../../src';
 import queries from './queries';
 import mutations from './mutations';
 import middleware from './middleware';
