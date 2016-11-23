@@ -86,8 +86,6 @@ test('should successfully call a mutation and some queries', async t => {
       }
     `);
 
-    console.log('results 1:', results);
-
     t.is(results.data.createuser.name, 'Bob');
     t.truthy(typeof results.errors === 'undefined');
 
@@ -99,8 +97,6 @@ test('should successfully call a mutation and some queries', async t => {
         }
       }
     `);
-
-    console.log('results 2:', results);
 
     t.is(results.data.allusers.length, 2);
     t.truthy(typeof results.errors === 'undefined');
