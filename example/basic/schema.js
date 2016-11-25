@@ -1,7 +1,5 @@
 import { GraphQLString, GraphQLList } from 'graphql';
 import Schema, { hasMany, belongsTo } from 'cohere';
-import flattenNode from './flattenNode';
-import optionsInputType from './optionsInputType';
 
 export default new Schema()
   .defineType('user', {
@@ -12,14 +10,16 @@ export default new Schema()
     relationships: {
       blogs: hasMany('blog', 'author', {
         output: GraphQLList,
-        args: {
-          options: { type: optionsInputType },
-        },
-
         resolve(user, args, ctx) {
-          return ctx.model('user')
-            .findRelated(user.id, 'blogs', args.options)
-            .then(blogs => blogs.map(flattenNode));
+          return new Promise((resolve, reject) => {
+            ctx.db.user.findOne({ _id: user.id }, (err, { blogs = [] }) => {
+              if (err) {
+                return reject(err);
+              }
+
+              return resolve(blogs);
+            });
+          });
         },
       }),
     },
@@ -35,9 +35,15 @@ export default new Schema()
     relationships: {
       author: belongsTo('user', 'blogs', {
         resolve(blog, args, ctx) {
-          return ctx.model('blog')
-            .findRelated(blog.id, 'author')
-            .then(flattenNode);
+          return new Promise((resolve, reject) => {
+            ctx.db.blog.findOne({ _id: blog.id }, (err, { author }) => {
+              if (err) {
+                return reject(err);
+              }
+
+              return resolve(author);
+            });
+          });
         },
       }),
     },

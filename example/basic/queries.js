@@ -4,27 +4,27 @@ import {
   GraphQLList,
 } from 'graphql';
 
-import optionsInputType from './optionsInputType';
-import flattenNode from './flattenNode';
+import normalizeDocument from './normalizeDocument';
 import titleize from './titleize';
 
 export default (type) => ({
   [`find${titleize(type.meta.inflection)}`]: {
     output: GraphQLList,
     description: `Finds all ${type.meta.inflection}.`,
-    args: {
-      options: { type: optionsInputType },
-    },
     actions: {
       resolve(args, ctx, next) {
-        ctx.model(type.name).find(args.options).then(data => {
-          ctx.data = data;
+        ctx.db[type.name].find({}, (err, docs) => {
+          if (err) {
+            throw err;
+          }
+
+          ctx.data = docs;
           next();
         });
       },
 
       finalize(ctx) {
-        return ctx.data.map(flattenNode);
+        return ctx.data.map(normalizeDocument);
       },
 
       error(err) {
@@ -36,19 +36,21 @@ export default (type) => ({
 
   [`fetch${titleize(type.name)}`]: {
     description: `Finds all ${type.meta.inflection}.`,
-    args: {
-      id: { type: new GraphQLNonNull(GraphQLID) },
-    },
+    args: { id: { type: new GraphQLNonNull(GraphQLID) } },
     actions: {
       resolve(args, ctx, next) {
-        ctx.model(type.name).fetch(args.id).then(data => {
-          ctx.data = data;
+        ctx.db[type.name].findOne({ _id: args.id }, (err, doc) => {
+          if (err) {
+            throw err;
+          }
+
+          ctx.data = doc;
           next();
         });
       },
 
       finalize(ctx) {
-        return flattenNode(ctx.data);
+        return normalizeDocument(ctx.data);
       },
 
       error(err) {

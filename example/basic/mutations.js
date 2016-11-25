@@ -4,7 +4,7 @@ import {
 } from 'graphql';
 
 import creationInputType from './creationInputType';
-import flattenNode from './flattenNode';
+import normalizeDocument from './normalizeDocument';
 import titleize from './titleize';
 
 export default (type) => ({
@@ -15,14 +15,14 @@ export default (type) => ({
     },
     actions: {
       resolve(args, ctx, next) {
-        ctx.model(type.name).create(args.input).then(data => {
-          ctx.data = data;
+        ctx.db[type.name].insert(args.input, (err, doc) => {
+          ctx.data = doc;
           next();
         });
       },
 
       finalize(ctx) {
-        return flattenNode(ctx.data);
+        return normalizeDocument(ctx.data);
       },
 
       error(err) {
@@ -40,14 +40,14 @@ export default (type) => ({
     },
     actions: {
       resolve(args, ctx, next) {
-        ctx.model(type.name).update(args.id, args.input).then(data => {
-          ctx.data = data;
+        ctx.db[type.name].update({ _id: args.id }, { $set: args.input }, (err, doc) => {
+          ctx.data = doc;
           next();
         });
       },
 
       finalize(ctx) {
-        return flattenNode(ctx.data);
+        return normalizeDocument(ctx.data);
       },
 
       error(err) {
@@ -57,21 +57,21 @@ export default (type) => ({
     },
   },
 
-  [`archive${titleize(type.name)}`]: {
+  [`remove${titleize(type.name)}`]: {
     description: `Deletes a ${type.name}.`,
     args: {
       id: { type: new GraphQLNonNull(GraphQLID) },
     },
     actions: {
       resolve(args, ctx, next) {
-        ctx.model(type.name).fetch(args.id)
-          .then(node => node.archive())
-          .then(node => (ctx.data = node))
-          .then(next);
+        ctx.db[type.name].remove({ _id: args.id }, (err, numRemoved) => {
+          ctx.data = numRemoved;
+          next();
+        });
       },
 
       finalize(ctx) {
-        return flattenNode(ctx.data);
+        return normalizeDocument(ctx.data);
       },
 
       error(err) {

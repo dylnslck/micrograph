@@ -35,8 +35,8 @@
     "express-graphql": "^0.5.4",
     "gitbook-cli": "^2.3.0",
     "graphql-relay": "^0.4.4",
-    "nyc": "^9.0.1",
-    "redink": "next"
+    "nedb": "^1.8.0",
+    "nyc": "^9.0.1"
   },
   "ava": {
     "files": [
