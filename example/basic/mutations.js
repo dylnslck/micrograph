@@ -1,6 +1,7 @@
 import {
   GraphQLID,
   GraphQLNonNull,
+  GraphQLInt,
 } from 'graphql';
 
 import creationInputType from './creationInputType';
@@ -33,6 +34,7 @@ export default (type) => ({
   },
 
   [`update${titleize(type.name)}`]: {
+    output: GraphQLInt,
     description: `Updates a ${type.name}'s attributes.`,
     args: {
       input: { type: creationInputType(type) },
@@ -40,14 +42,14 @@ export default (type) => ({
     },
     actions: {
       resolve(args, ctx, next) {
-        ctx.db[type.name].update({ _id: args.id }, { $set: args.input }, (err, doc) => {
-          ctx.data = doc;
+        ctx.db[type.name].update({ _id: args.id }, { $set: args.input }, (err, numUpdated) => {
+          ctx.data = numUpdated;
           next();
         });
       },
 
       finalize(ctx) {
-        return normalizeDocument(ctx.data);
+        return ctx.data;
       },
 
       error(err) {
@@ -58,6 +60,7 @@ export default (type) => ({
   },
 
   [`remove${titleize(type.name)}`]: {
+    output: GraphQLInt,
     description: `Deletes a ${type.name}.`,
     args: {
       id: { type: new GraphQLNonNull(GraphQLID) },
@@ -71,7 +74,7 @@ export default (type) => ({
       },
 
       finalize(ctx) {
-        return normalizeDocument(ctx.data);
+        return ctx.data;
       },
 
       error(err) {

@@ -1,3 +1,4 @@
+import { isOutputType } from 'graphql';
 import handleResolver from './handleResolver';
 import createResolver from './resolver';
 
@@ -11,16 +12,22 @@ export default (queriesOrMutations, middleware, types, name) =>
       );
     }
 
-    const type = OutputType
-      ? new OutputType(types[name])
-      : types[name];
+    let outputType;
+
+    if (isOutputType(OutputType)) {
+      outputType = OutputType;
+    } else {
+      outputType = OutputType
+        ? new OutputType(types[name])
+        : types[name];
+    }
 
     return {
       ...accumulator,
       [key]: {
         description,
         args,
-        type,
+        type: outputType,
         resolve(root, mutableArgs, mutableCtx) {
           const { resolve, finalize, error } = actions;
 
