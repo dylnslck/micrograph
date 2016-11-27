@@ -26,16 +26,15 @@ export default (type) => ({
   },
   // findUsers and findBlogs
   [`find${titleize(type.name)}s`]: {
-      output: GraphQLList,
-      description: `Finds all ${type.name} types`,
-      actions: {
-        resolve: (args, ctx, next) => ctx.db(type.name)
-          .find()
-          .then(data => ctx.data = data)
-          .then(next),
-        finalize: (ctx) => ctx.data,
-        error: (err) => console.log(err),
-      },
+    output: GraphQLList,
+    description: `Finds all ${type.name} types`,
+    actions: {
+      resolve: (args, ctx, next) => ctx.db(type.name)
+        .find()
+        .then(data => ctx.data = data)
+        .then(next),
+      finalize: (ctx) => ctx.data,
+      error: (err) => console.log(err),
     },
   },
 });
