@@ -8,15 +8,15 @@ const doesPatternMatch = (pattern, name) => {
   );
 };
 
-const call = (fn, args, ctx, next, escape) => {
+const call = (fn, args, ctx, next, bail) => {
   try {
     const called = fn(args, ctx, () => next(args, ctx));
 
     if (called && typeof called.then === 'function') {
-      called.then(() => next(args, ctx)).catch(escape);
+      called.then(() => next(args, ctx)).catch(bail);
     }
   } catch (err) {
-    escape(err);
+    bail(err);
   }
 };
 
@@ -47,7 +47,7 @@ class Resolver {
     };
   }
 
-  handle(stack, args, ctx, done, escape) {
+  handle(stack, args, ctx, done, bail) {
     const { before, after } = this.filterStack(stack);
     const layers = [
       ...before,
@@ -65,7 +65,7 @@ class Resolver {
         return;
       }
 
-      call(layer.fn, mutableArgs, mutableCtx, next, escape);
+      call(layer.fn, mutableArgs, mutableCtx, next, bail);
     };
 
     next({ ...args }, { ...ctx });
