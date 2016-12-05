@@ -4,7 +4,6 @@ import {
   GraphQLList,
 } from 'graphql';
 
-import normalizeDocument from './normalizeDocument';
 import titleize from './titleize';
 
 export default (type) => ({
@@ -12,19 +11,13 @@ export default (type) => ({
     output: GraphQLList,
     description: `Finds all ${type.meta.inflection}.`,
     actions: {
-      resolve(args, ctx, next) {
-        ctx.db[type.name].find({}, (err, docs) => {
-          if (err) {
-            throw err;
-          }
-
-          ctx.data = docs;
-          next();
-        });
+      resolve(args, ctx) {
+        return type.meta.model.find(args, ctx)
+          .then(data => (ctx.data = data));
       },
 
       finalize(ctx) {
-        return ctx.data.map(normalizeDocument);
+        return ctx.data;
       },
 
       error(err) {
@@ -34,23 +27,17 @@ export default (type) => ({
     },
   },
 
-  [`fetch${titleize(type.name)}`]: {
+  [`findOne${titleize(type.name)}`]: {
     description: `Finds all ${type.meta.inflection}.`,
     args: { id: { type: new GraphQLNonNull(GraphQLID) } },
     actions: {
-      resolve(args, ctx, next) {
-        ctx.db[type.name].findOne({ _id: args.id }, (err, doc) => {
-          if (err) {
-            throw err;
-          }
-
-          ctx.data = doc;
-          next();
-        });
+      resolve(args, ctx) {
+        return type.meta.model.findOne(args, ctx)
+          .then(data => (ctx.data = data));
       },
 
       finalize(ctx) {
-        return normalizeDocument(ctx.data);
+        return ctx.data;
       },
 
       error(err) {

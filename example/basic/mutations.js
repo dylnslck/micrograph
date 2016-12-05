@@ -5,7 +5,6 @@ import {
 } from 'graphql';
 
 import creationInputType from './creationInputType';
-import normalizeDocument from './normalizeDocument';
 import titleize from './titleize';
 
 export default (type) => ({
@@ -15,15 +14,13 @@ export default (type) => ({
       input: { type: creationInputType(type) },
     },
     actions: {
-      resolve(args, ctx, next) {
-        ctx.db[type.name].insert(args.input, (err, doc) => {
-          ctx.data = doc;
-          next();
-        });
+      resolve(args, ctx) {
+        return type.meta.model.insert(args, ctx)
+          .then(data => (ctx.data = data));
       },
 
       finalize(ctx) {
-        return normalizeDocument(ctx.data);
+        return ctx.data;
       },
 
       error(err) {
@@ -41,11 +38,9 @@ export default (type) => ({
       id: { type: new GraphQLNonNull(GraphQLID) },
     },
     actions: {
-      resolve(args, ctx, next) {
-        ctx.db[type.name].update({ _id: args.id }, { $set: args.input }, (err, numUpdated) => {
-          ctx.data = numUpdated;
-          next();
-        });
+      resolve(args, ctx) {
+        return type.meta.model.update(args, ctx)
+          .then(numUpdated => (ctx.data = numUpdated));
       },
 
       finalize(ctx) {
@@ -66,11 +61,9 @@ export default (type) => ({
       id: { type: new GraphQLNonNull(GraphQLID) },
     },
     actions: {
-      resolve(args, ctx, next) {
-        ctx.db[type.name].remove({ _id: args.id }, (err, numRemoved) => {
-          ctx.data = numRemoved;
-          next();
-        });
+      resolve(args, ctx) {
+        return type.meta.model.remove(args, ctx)
+          .then(numRemoved => (ctx.data = numRemoved));
       },
 
       finalize(ctx) {

@@ -1,54 +1,30 @@
-import { GraphQLString, GraphQLList } from 'graphql';
-import Schema, { hasMany, belongsTo } from 'cohere';
+import { GraphQLString } from 'graphql';
+import { Blog, User } from './models';
+import Schema, { hasMany, belongsTo } from '../../src/Schema';
 
 export default new Schema()
-  .defineType('user', {
-    attributes: {
-      name: GraphQLString,
-      email: GraphQLString,
-    },
-    relationships: {
-      blogs: hasMany('blog', 'author', {
-        output: GraphQLList,
-        resolve(user, args, ctx) {
-          return new Promise((resolve, reject) => {
-            ctx.db.user.findOne({ _id: user.id }, (err, { blogs = [] }) => {
-              if (err) {
-                return reject(err);
-              }
-
-              return resolve(blogs);
-            });
-          });
-        },
-      }),
-    },
-    meta: {
-      inflection: 'users',
-    },
-  })
-  .defineType('blog', {
+  .defineType(Blog, {
     attributes: {
       title: GraphQLString,
       content: GraphQLString,
     },
     relationships: {
-      author: belongsTo('user', 'blogs', {
-        resolve(blog, args, ctx) {
-          return new Promise((resolve, reject) => {
-            ctx.db.blog.findOne({ _id: blog.id }, (err, { author }) => {
-              if (err) {
-                return reject(err);
-              }
-
-              return resolve(author);
-            });
-          });
-        },
-      }),
+      author: belongsTo('user', 'blogs'),
     },
     meta: {
       inflection: 'blogs',
+    },
+  })
+  .defineType(User, {
+    attributes: {
+      name: GraphQLString,
+      email: GraphQLString,
+    },
+    relationships: {
+      blogs: hasMany('blog', 'author'),
+    },
+    meta: {
+      inflection: 'users',
     },
   })
   .compile();

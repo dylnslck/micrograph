@@ -12,7 +12,7 @@ const getDefaultDescription = (name) => `The ${titleizeType(name)} model.`;
 const typeCache = {};
 
 export default (schema) => {
-  const graphQLObjectTypes = schema.types.reduce((prev, type) => {
+  const objectTypes = schema.types.reduce((prev, type) => {
     const { meta, name } = type;
 
     if (typeCache.hasOwnProperty(name)) return prev;
@@ -26,7 +26,7 @@ export default (schema) => {
         fields: () => ({
           // dynamic fields
           ...buildAttributes(type),
-          ...buildRelationships(type, graphQLObjectTypes),
+          ...buildRelationships(type, objectTypes),
 
           // static fields, make sure they aren't overwritten
           id: { type: new GraphQLNonNull(GraphQLID) },
@@ -35,5 +35,5 @@ export default (schema) => {
     };
   }, {});
 
-  return graphQLObjectTypes;
+  return objectTypes;
 };

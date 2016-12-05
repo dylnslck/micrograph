@@ -1,6 +1,6 @@
 import { GraphQLList, isOutputType } from 'graphql';
 
-export default (type, graphQLObjectTypes) => {
+export default (type, objectTypes) => {
   const { relationships } = type;
 
   return relationships.reduce((prev, relationship) => {
@@ -8,17 +8,9 @@ export default (type, graphQLObjectTypes) => {
       field,
       relation,
       name,
-      resolve,
       args = {},
       output: OutputType,
     } = relationship;
-
-    if (!resolve) {
-      throw new TypeError(
-        'Micrograph requires Cohere types to include a resolve method for relationships. There ' +
-        `was no resolve method found for the ${field} relationship on the ${type.name} type.`
-      );
-    }
 
     let outputType;
 
@@ -29,14 +21,14 @@ export default (type, graphQLObjectTypes) => {
       if (relation === 'hasMany') {
         outputType = (
           OutputType &&
-          new OutputType(graphQLObjectTypes[name]) ||
-          new GraphQLList(graphQLObjectTypes[name])
+          new OutputType(objectTypes[name]) ||
+          new GraphQLList(objectTypes[name])
         );
       } else {
         outputType = (
           OutputType &&
-          new OutputType(graphQLObjectTypes[name]) ||
-          graphQLObjectTypes[name]
+          new OutputType(objectTypes[name]) ||
+          objectTypes[name]
         );
       }
     }
@@ -44,9 +36,15 @@ export default (type, graphQLObjectTypes) => {
     return {
       ...prev,
       [field]: {
-        type: outputType,
         args,
-        resolve,
+        type: outputType,
+        resolve(parent, fieldArgs, ctx) {
+          if (!parent) return null;
+          const fieldResolver = parent[field];
+
+          if (typeof fieldResolver !== 'function') return fieldResolver;
+          return parent[field](fieldArgs, ctx);
+        },
       },
     };
   }, {});
