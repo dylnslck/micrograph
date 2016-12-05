@@ -110,7 +110,6 @@ test('should successfully call a mutation and some queries', async t => {
       }
     `);
 
-
     t.is(results.data.fetchuser.name, 'Dylan');
     t.truthy(typeof results.errors === 'undefined');
   } catch (err) {

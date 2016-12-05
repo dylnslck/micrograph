@@ -7,7 +7,6 @@ import {
 } from 'graphql';
 
 import errorLogger from './errorLogger';
-import db from './database';
 
 const BlogInput = new GraphQLInputObjectType({
   name: 'BlogInput',
@@ -40,19 +39,9 @@ export default (type) => {
     [`create${type.name}`]: {
       args: { input: { type: new GraphQLNonNull(inputType) } },
       actions: {
-        finalize: (ctx) => ctx.res.data,
+        finalize: (ctx) => ctx.data,
         error: (err) => errorLogger().add(err),
-        resolve: (args, ctx, next) => {
-          const id = `${Date.now()}`;
-          const input = {
-            ...args.input,
-            id,
-          };
-
-          return db().set(type.name, id, input)
-            .then(res => (ctx.res = res))
-            .then(next);
-        },
+        resolve: (args, ctx) => type.meta.model.create(args).then(data => (ctx.data = data)),
       },
     },
   };

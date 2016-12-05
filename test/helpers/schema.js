@@ -1,9 +1,9 @@
 import { GraphQLString } from 'graphql';
-import Schema, { hasMany, belongsTo } from 'cohere';
-import db from './database';
+import { Schema, hasMany, belongsTo } from '../../src';
+import { Blog, User } from './models';
 
 export default new Schema()
-  .defineType('user', {
+  .defineType(User, {
     attributes: {
       name: GraphQLString,
       email: GraphQLString,
@@ -13,24 +13,16 @@ export default new Schema()
         args: {
           title: { type: GraphQLString },
         },
-        resolve({ blogs }) {
-          if (!blogs) return [];
-          return blogs.map(id => db().get('blog', id));
-        },
       }),
     },
   })
-  .defineType('blog', {
+  .defineType(Blog, {
     attributes: {
       title: GraphQLString,
       content: GraphQLString,
     },
     relationships: {
-      author: belongsTo('user', 'blogs', {
-        resolve(blog) {
-          return db().get('user', db().get('blog', blog.id).author);
-        },
-      }),
+      author: belongsTo('user', 'blogs'),
     },
   })
   .compile();

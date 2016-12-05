@@ -1,6 +1,6 @@
 import { GraphQLString } from 'graphql';
 import { Blog, User } from './models';
-import Schema, { hasMany, belongsTo } from '../../src/Schema';
+import { Schema, hasMany, belongsTo } from '../../src';
 
 export default new Schema()
   .defineType(Blog, {
