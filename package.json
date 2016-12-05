@@ -7,17 +7,18 @@
   "author": "Dylan Slack <dylanslack@gmail.com> (http://www.dylanslack.com)",
   "license": "MIT",
   "scripts": {
-    "build": "npm run clean && mkdirp dist && babel src --out-dir dist",
+    "build": "yarn run clean && mkdirp dist && babel src --out-dir dist",
     "clean": "rimraf dist coverage .nyc_output",
-    "cover": "npm run clean && nyc ava && nyc report --reporter=html && open -a \"Google Chrome\" coverage/index.html",
+    "cover": "yarn run clean && nyc ava && nyc report --reporter=html && open -a \"Google Chrome\" coverage/index.html",
     "docs:publish": "cd docs && rimraf _book && gitbook build && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push https://github.com/directlyio/micrograph.git gh-pages --force",
-    "test": "npm run test:lint && npm run test:src",
+    "test": "yarn run test:lint && yarn run test:src",
     "test:lint": "eslint src test",
     "test:src": "nyc ava && nyc report --reporter=lcov",
-    "prepublish": "npm run build"
+    "prepublish": "yarn run build"
   },
   "dependencies": {
-    "graphql": "^0.7.2"
+    "graphql": "^0.7.2",
+    "cohere": "^1.0.5"
   },
   "devDependencies": {
     "ava": "^0.16.0",
@@ -25,7 +26,6 @@
     "babel-eslint": "^6.1.2",
     "babel-preset-es2015": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
-    "cohere": "^1.0.2",
     "eslint": "^3.0.1",
     "eslint-config-airbnb": "^9.0.1",
     "eslint-plugin-import": "^1.10.3",
@@ -35,8 +35,10 @@
     "express-graphql": "^0.5.4",
     "gitbook-cli": "^2.3.0",
     "graphql-relay": "^0.4.4",
+    "mkdirp": "^0.5.1",
     "nedb": "^1.8.0",
-    "nyc": "^9.0.1"
+    "nyc": "^9.0.1",
+    "rimraf": "^2.5.4"
   },
   "ava": {
     "files": [
