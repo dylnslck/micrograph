@@ -19,7 +19,7 @@ export default (type) => ({
           .then(data => (ctx.data = data));
       },
 
-      finalize(args, ctx) {
+      finalize(ctx) {
         return ctx.data;
       },
 
@@ -43,7 +43,7 @@ export default (type) => ({
           .then(numUpdated => (ctx.data = numUpdated));
       },
 
-      finalize(args, ctx) {
+      finalize(ctx) {
         return ctx.data;
       },
 
@@ -66,7 +66,7 @@ export default (type) => ({
           .then(numRemoved => (ctx.data = numRemoved));
       },
 
-      finalize(args, ctx) {
+      finalize(ctx) {
         return ctx.data;
       },
 

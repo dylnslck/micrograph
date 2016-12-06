@@ -39,7 +39,7 @@ export default (type) => {
     [`create${type.name}`]: {
       args: { input: { type: new GraphQLNonNull(inputType) } },
       actions: {
-        finalize: (ctx) => ctx.data,
+        finalize: (args, ctx) => ctx.data,
         error: (err) => errorLogger().add(err),
         resolve: (args, ctx) => type.model.create(args).then(data => (ctx.data = data)),
       },

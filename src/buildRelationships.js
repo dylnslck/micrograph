@@ -8,6 +8,7 @@ export default (type, objectTypes) => {
       field,
       relation,
       name,
+      transform,
       args = {},
       output: OutputType,
     } = relationship;
@@ -43,7 +44,20 @@ export default (type, objectTypes) => {
           const fieldResolver = parent[field];
 
           if (typeof fieldResolver !== 'function') return fieldResolver;
-          return parent[field](fieldArgs, ctx);
+
+          const results = parent[field](fieldArgs, ctx);
+
+          if (results && typeof results.then === 'function') {
+            return results.then(data => (
+              transform && typeof transform === 'function'
+                ? transform(data, fieldArgs, ctx)
+                : results
+            ));
+          }
+
+          return transform && typeof transform === 'function'
+            ? transform(results, fieldArgs, ctx)
+            : results;
         },
       },
     };

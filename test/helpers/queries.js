@@ -5,7 +5,7 @@ export default (type) => ({
   [`fetch${type.name}`]: {
     args: { id: { type: GraphQLID } },
     actions: {
-      finalize: (ctx) => ctx.data,
+      finalize: (args, ctx) => ctx.data,
       error: (err) => errorLogger().add(err),
       resolve: (args, ctx) => type.model.get(args).then(data => (ctx.data = data)),
     },
@@ -13,7 +13,7 @@ export default (type) => ({
   [`all${type.name}s`]: {
     output: GraphQLList,
     actions: {
-      finalize: (ctx) => ctx.data,
+      finalize: (args, ctx) => ctx.data,
       error: (err) => errorLogger().add(err),
       resolve: (args, ctx) => type.model.getAll().then(data => (ctx.data = data)),
     },

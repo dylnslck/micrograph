@@ -61,7 +61,7 @@ class Resolver {
       const layer = layers[index++];
 
       if (!layer) {
-        done(mutableCtx);
+        done({ finalArgs: mutableArgs, finalCtx: mutableCtx });
         return;
       }
 

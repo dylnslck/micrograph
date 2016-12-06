@@ -1,14 +1,16 @@
 import {
   GraphQLNonNull,
   GraphQLID,
-  GraphQLList,
 } from 'graphql';
 
+import { connectionArgs, connectionFromArray } from 'graphql-relay';
+import createConnectionType from './createConnectionType';
 import titleize from './titleize';
 
 export default (type) => ({
   [`find${titleize(type.inflection)}`]: {
-    output: GraphQLList,
+    args: connectionArgs,
+    output: createConnectionType,
     description: `Finds all ${type.inflection}.`,
     actions: {
       resolve(args, ctx) {
@@ -17,7 +19,7 @@ export default (type) => ({
       },
 
       finalize(args, ctx) {
-        return ctx.data;
+        return connectionFromArray(ctx.data, args);
       },
 
       error(err) {
@@ -36,7 +38,7 @@ export default (type) => ({
           .then(data => (ctx.data = data));
       },
 
-      finalize(args, ctx) {
+      finalize(ctx) {
         return ctx.data;
       },
 
