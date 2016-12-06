@@ -103,8 +103,8 @@ test('should run asnyc/sync middleware in order with valid patterns', async t =>
     const ctx = { alphabetical: '' };
 
     userResolver.handle(middleware.stack, args, ctx, resolve, reject);
-  }).then(ctx => {
-    t.is(ctx.alphabetical, 'abcdefgh');
+  }).then(({ finalCtx }) => {
+    t.is(finalCtx.alphabetical, 'abcdefgh');
   });
 });
 
