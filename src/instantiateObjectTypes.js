@@ -13,7 +13,7 @@ const typeCache = {};
 
 export default (schema) => {
   const objectTypes = schema.types.reduce((prev, type) => {
-    const { meta, name } = type;
+    const { description, name } = type;
 
     if (typeCache.hasOwnProperty(name)) return prev;
     typeCache[name] = true;
@@ -21,7 +21,7 @@ export default (schema) => {
     return {
       ...prev,
       [name]: new GraphQLObjectType({
-        description: meta && meta.description || getDefaultDescription(name),
+        description: description || getDefaultDescription(name),
         name: `${titleizeType(name)}`,
         fields: () => ({
           // dynamic fields

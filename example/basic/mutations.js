@@ -15,7 +15,7 @@ export default (type) => ({
     },
     actions: {
       resolve(args, ctx) {
-        return type.meta.model.insert(args, ctx)
+        return type.model.insert(args, ctx)
           .then(data => (ctx.data = data));
       },
 
@@ -39,7 +39,7 @@ export default (type) => ({
     },
     actions: {
       resolve(args, ctx) {
-        return type.meta.model.update(args, ctx)
+        return type.model.update(args, ctx)
           .then(numUpdated => (ctx.data = numUpdated));
       },
 
@@ -62,7 +62,7 @@ export default (type) => ({
     },
     actions: {
       resolve(args, ctx) {
-        return type.meta.model.remove(args, ctx)
+        return type.model.remove(args, ctx)
           .then(numRemoved => (ctx.data = numRemoved));
       },
 

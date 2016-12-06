@@ -12,8 +12,6 @@ export default class Blog {
     this.authorId = data.author;
   }
 
-  static typeName = 'blog'
-
   static gen(args, ctx, data) {
     return checkCanSee(args, ctx, data) ? new Blog(data) : null;
   }

@@ -7,12 +7,12 @@ import {
 import titleize from './titleize';
 
 export default (type) => ({
-  [`find${titleize(type.meta.inflection)}`]: {
+  [`find${titleize(type.inflection)}`]: {
     output: GraphQLList,
-    description: `Finds all ${type.meta.inflection}.`,
+    description: `Finds all ${type.inflection}.`,
     actions: {
       resolve(args, ctx) {
-        return type.meta.model.find(args, ctx)
+        return type.model.find(args, ctx)
           .then(data => (ctx.data = data));
       },
 
@@ -28,11 +28,11 @@ export default (type) => ({
   },
 
   [`findOne${titleize(type.name)}`]: {
-    description: `Finds all ${type.meta.inflection}.`,
+    description: `Finds all ${type.inflection}.`,
     args: { id: { type: new GraphQLNonNull(GraphQLID) } },
     actions: {
       resolve(args, ctx) {
-        return type.meta.model.findOne(args, ctx)
+        return type.model.findOne(args, ctx)
           .then(data => (ctx.data = data));
       },
 

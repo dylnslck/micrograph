@@ -17,8 +17,10 @@
     "prepublish": "yarn run build"
   },
   "dependencies": {
-    "graphql": "^0.7.2",
-    "cohere": "^1.0.5"
+    "graphql": "^0.7.2"
+  },
+  "peerDependencies": {
+    "cohere": "^1.0.6"
   },
   "devDependencies": {
     "ava": "^0.16.0",

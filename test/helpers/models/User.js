@@ -8,8 +8,6 @@ export default class User {
     this.name = data.name;
   }
 
-  static typeName = 'user'
-
   static getAll() {
     return db().getAll('user')
       .then(({ data }) => data.map(user => new User(user)));

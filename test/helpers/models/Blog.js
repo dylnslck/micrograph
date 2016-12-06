@@ -9,8 +9,6 @@ export default class Blog {
     this.authorId = data.author;
   }
 
-  static typeName = 'blog'
-
   static getall() {
     return db().getAll('blog')
       .then(({ data }) => data.map(blog => new Blog(blog)));

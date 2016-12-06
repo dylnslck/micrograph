@@ -7,7 +7,7 @@ export default (type) => ({
     actions: {
       finalize: (ctx) => ctx.data,
       error: (err) => errorLogger().add(err),
-      resolve: (args, ctx) => type.meta.model.get(args).then(data => (ctx.data = data)),
+      resolve: (args, ctx) => type.model.get(args).then(data => (ctx.data = data)),
     },
   },
   [`all${type.name}s`]: {
@@ -15,7 +15,7 @@ export default (type) => ({
     actions: {
       finalize: (ctx) => ctx.data,
       error: (err) => errorLogger().add(err),
-      resolve: (args, ctx) => type.meta.model.getAll().then(data => (ctx.data = data)),
+      resolve: (args, ctx) => type.model.getAll().then(data => (ctx.data = data)),
     },
   },
 });

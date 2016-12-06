@@ -11,8 +11,6 @@ export default class User {
     this.email = data.email;
   }
 
-  static typeName = 'user'
-
   static gen(args, ctx, data) {
     return checkCanSee(ctx, args, data) ? new User(data) : null;
   }
