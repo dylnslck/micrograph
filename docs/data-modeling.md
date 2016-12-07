@@ -13,11 +13,12 @@ npm install --save cohere
 `cohere` is opiniated with relationships. It supports **hasMany**, **belongsTo**, and **hasOne**.
 
 ### `hasMany(type, inverse, options)`
-The `hasMany` relationship is used for **1:N** or **M:N** relationships. For example, a user might have many blogs. In another example, a teacher might have many students and vice versa.
+The `hasMany` relationship is used for **M:1** or **M:N** relationships. For example, a user might have many blogs. In another example, a teacher might have many students and vice versa.
 
 ```javascript
 import { GraphQLString } from 'graphql';
 import Schema, { hasMany, belongsTo, hasOne } from 'cohere';
+import { Blog, User } from './models';
 
 export default new Schema()
   .defineType('user', {
@@ -27,6 +28,7 @@ export default new Schema()
     relationships: {
       blogs: hasMany('blog', 'author', {...}),
     },
+    model: User,
   })
   .defineType('blog', {
     attributes: {
@@ -35,6 +37,7 @@ export default new Schema()
     relationships: {
       author: belongsTo('user', 'blogs', {...}),
     },
+    model: Blog,
   })
   .compile();
 ```
@@ -63,7 +66,7 @@ query getBlogsAuthor {
 ```
 
 ### belongsTo vs. hasOne
-Both `belongsTo` and `hasOne` are for modeling **1:1** relationships. In the example above, the `blog` type belongs to a `user` type via the `author` field.
+Both `belongsTo` and `hasOne` are for modeling **1:1** and **1:M** relationships. In the example above, the `blog` type belongs to a `user` type via the `author` field.
 
 Micrograph will generate an `author` field on the `Blog` type that points to a `User` type.
 
@@ -78,68 +81,87 @@ relationships: {
 },
 ...
 ```
-In this example, it doesn't make sense for a `user` to belong to a company because a user might be unemployed. We're stating that a `user` may only ever have **0** or **1** company at a time.
+In this example, it doesn't make sense for a `user` to belong to a company because a user might be unemployed.
 
 Micrograph handles `belongsTo` and `hasOne` relationships identically, and their use cases are left to the developer. For example, you might use `belongsTo` or `hasOne` to specify which table has the foreign key, how cascade deletion works, or which NoSQL collection has an index.
 
 ### Resolving relationships
-Micrograph requires that every relationship's third argument is an object. This object must have a `resolve` function and an optional `args` object.
+Micrograph expects every model to have a corresponding instance method that matches the relationship's name. For example, if a user has many blogs, then the `User` class should have a `blogs` method.
 
-### `resolve(parent, args, ctx)`
-The `resolve` function does the majority of the work. Almost always, it will retrieve data from a database.
+```js
+import db from './database';
 
-```javascript
+class User {
+  constructor(data) {
+    this.id = data.id;
+    this.name = data.name;
+    ...
+  }
+
+  blogs(args, ctx) {
+    return db.blogs.find({ author: this.id });
+  }
+}
+```
+
+If a schema type declares that it has a certain relationship, but the class does not have an instance method with a matching name, Micrograph will always resolve that relationship as `null`.
+
+### Overriding a relationship's output type
+Micrograph creates a `[Blog]` type automatically for `hasMany` relationships. You can override the output, however. You can do things like have Relay support:
+
+```js
+// schema.js
 ...
-relationships: {
-  blogs: hasMany('blog', 'author', {
-    resolve: (parent, args, ctx) => {
-      // Pretend the server configured the ctx
-      // object with a convenient database service
-      return ctx.db.user(parent.id).blogs();
-    },
+schema.defineType('user', {
+  attributes: {
+    name: GraphQLString,
   },
-},
-...
-```
-
-Once we get the data from the database, we mutate `ctx` so that it can be consumed by `finalize`.
-### `args`
-You can specify arguments to be used by `resolve` just like normal:
-
-```javascript
-...
-relationships: {
-  blogs: hasMany('blog', 'author', {
-    args: {
-      limit: { type: GraphQLInt },
-    },
-    resolve: (parent, args, ctx) => {
-      // Pretend our database service has a "limit" option
-      // to limit the number of blogs returned
-      return ctx.db.user(parent.id).blogs({ limit });
-    },
+  relationships: {
+    blogs: hasMany('blog', 'author', {
+      output: createConnectionType,
+    });
   },
-},
+});
 ...
 ```
 
-When resolving fields, you must make sure the retrieved data has the proper shape.
+You can also transform the data in the schema without having to mess with your business-logic layer. So, if the `User` class's `blogs` method returns a normal array, you have an opportunity to transform it into the shape required by your `output` key:
 
-For example, if our database service returns data in a top-level `data` key, our example above needs to be modified:
-
-```
+```js
+// schema.js
 ...
-relationships: {
-  blogs: hasMany('blog', 'author', {
-    args: {
-      limit: { type: GraphQLInt },
-    },
-    resolve: (parent, args, ctx) => {
-      // Extract the data out
-      return ctx.db.user(parent.id).blogs({ limit })
-        .then(res => res.data);
-    },
+schema.defineType('user', {
+  attributes: {
+    name: GraphQLString,
   },
-},
+  relationships: {
+    blogs: hasMany('blog', 'author', {
+      output: createConnectionType,
+      transform: connectionFromArray,
+    });
+  },
+});
 ...
 ```
+
+Just like root queries and root mutations, you can specify `args` for each relationship:
+
+```js
+// schema.js
+...
+schema.defineType('user', {
+  attributes: {
+    name: GraphQLString,
+  },
+  relationships: {
+    blogs: hasMany('blog', 'author', {
+      output: createConnectionType,
+      transform: connectionFromArray,
+      args: connectionArgs,
+    });
+  },
+});
+...
+```
+
+Now, rather than the `blogs` relationship having the default `[Blog]` type, it's now a `BlogConnection` type. Check out [an example Relay app](https://github.com/dylnslck/micrograph/tree/master/example/relay).
