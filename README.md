@@ -1,4 +1,4 @@
-![](docs/assets/logo.svg)
+![](docs/assets/logo.png)
 # Micrograph
 ![](https://travis-ci.org/dylnslck/micrograph.svg?branch=master) [![codecov](https://codecov.io/gh/dylnslck/micrograph/branch/master/graph/badge.svg)](https://codecov.io/gh/dylnslck/micrograph)
 
