@@ -1,5 +1,7 @@
  ![](assets/logo.svg)
 # Micrograph
+[Github](https://github.com/dylnslck/micrograph)
+
 ![](https://travis-ci.org/dylnslck/micrograph.svg?branch=master) [![codecov](https://codecov.io/gh/dylnslck/micrograph/branch/master/graph/badge.svg)](https://codecov.io/gh/dylnslck/micrograph)
 
 Micrograph is a small (~375 LOC) library that makes developing large GraphQL applications with complex business logic pretty easy. Micrograph generalizes root queries and root mutations across every type in your data model. In other words, you can bootstrap a pretty large GraphQL application by writing a few functions. Afterwords, you can continue to add/modify types in your data model without adding and linking GraphQL-specific object types.
