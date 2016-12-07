@@ -15,4 +15,4 @@ touch index.js schema.js queries.js mutations.js middleware.js models/User.js mo
 4. [Middleware](tutorial/middleware.html)
 5. [Wire everything together](tutorial/wire-everything-together.html)
 
-If you don't really care for tutorials and just want to see some code, you can check out an example [basic Micrograph app](https://github.com/dylnslck/micrograph/tree/master/example/basic) and an example [Relay Micrograph app](https://github.com/dylnslck/micrograph/tree/master/example/relay).
+If you don't really care for tutorials and just want to see some code, you can check out [some examples](https://github.com/dylnslck/micrograph/tree/master/example).
