@@ -5,8 +5,6 @@ Micrograph is relatively un-opinionated in regards to your business logic layer.
 For this tutorial, we're going to create two classes: `User` and `Blog` classes.
 
 ## `User`
-Create a folder called `models`. Then, create a `User.js` and `Blog.js` file inside the models folder.
-
 ```js
 // User.js
 import Blog from './Blog';

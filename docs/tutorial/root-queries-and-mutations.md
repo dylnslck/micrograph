@@ -11,29 +11,22 @@ import { GraphQLNonNull, GraphQLID, GraphQLList } from 'graphql';
 const titleize = (str) => `${str[0].toUpperCase()}${str.slice(1)}`;
 
 export default (type) => ({
-  // fetchUser and fetchBlog
-  [`fetch${titleize(type.name)}`]: {
+  // findOneUser and findOneBlog
+  [`findOne${titleize(type.name)}`]: {
     description: `Retrieves a single ${type.name}`,
     args: { id: { type: new GraphQLNonNull(GraphQLID) } },
     actions: {
-      resolve: (args, ctx, next) => ctx.db(type.name)
-        .fetch(args.id)
-        .then(data => ctx.data = data)
-        .then(next),
-      finalize: (ctx) => ctx.data,
+      resolve: (args, ctx) => type.model.findOne(args, ctx).then(data => ctx.data = data),
+      finalize: (args, ctx) => ctx.data,
       error: (err) => console.log(err),
     },
   },
-  // findUsers and findBlogs
-  [`find${titleize(type.name)}s`]: {
-    output: GraphQLList,
+  // findAllUsers and findAllBlogs
+  [`findAll${titleize(type.name)}s`]: {
     description: `Finds all ${type.name} types`,
     actions: {
-      resolve: (args, ctx, next) => ctx.db(type.name)
-        .find()
-        .then(data => ctx.data = data)
-        .then(next),
-      finalize: (ctx) => ctx.data,
+      resolve: (args, ctx) => type.model.findAll(args, ctx).then(data => ctx.data = data),
+      finalize: (args, ctx) => ctx.data,
       error: (err) => console.log(err),
     },
   },
@@ -84,11 +77,8 @@ export default (type) => ({
       input: { type: createInputObject(type) },
     },
     actions: {
-      resolve: (args, ctx, next) => ctx.db(type.name),
-        .create(args.input)
-        .then(data => ctx.data = data),
-        .then(next),
-      finalize: (ctx) => ctx.data
+      resolve: (args, ctx) => type.model.create(args, ctx).then(data => ctx.data = data),
+      finalize: (args, ctx) => ctx.data
     },
   },
   // updateUser and updateBlog
@@ -99,11 +89,8 @@ export default (type) => ({
       id: { type: new GraphQLNonNull(GraphQLID) },
     },
     actions: {
-      resolve: (args, ctx, next) => ctx.db(type.name)
-        .update(args.id, args.input)
-        .then(data => ctx.data = data)
-        .then(next),
-      finalize: (ctx) => ctx.data,
+      resolve: (args, ctx) => type.model.update(args, ctx).then(data => ctx.data = data),
+      finalize: (args, ctx) => ctx.data,
     },
   },
 });

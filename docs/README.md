@@ -1,6 +1,6 @@
  ![](assets/logo.svg)
 # Micrograph
-![](https://travis-ci.org/directlyio/micrograph.svg?branch=master) [![codecov](https://codecov.io/gh/directlyio/micrograph/branch/master/graph/badge.svg)](https://codecov.io/gh/directlyio/micrograph)
+![](https://travis-ci.org/dylnslck/micrograph.svg?branch=master) [![codecov](https://codecov.io/gh/dylnslck/micrograph/branch/master/graph/badge.svg)](https://codecov.io/gh/dylnslck/micrograph)
 
 Micrograph is a small (~375 LOC) middleware library that makes developing large GraphQL applications with complex business logic pretty easy. Micrograph generalizes root queries and root mutations across every type in your data model. In other words, you can bootstrap a pretty large GraphQL application by writing a few functions. Afterwords, you can continue to add/modify types in your data model without adding and linking GraphQL-specific object types.
 
@@ -24,7 +24,7 @@ Now, we need to define the schema, queries, mutations, and middleware. These ste
 
 ## Documentation {#documentation}
 1. [Tutorial](tutorial.md)
-  1. [Define your business-logic layer](tutorial/define-business-logic.html)
+  1. [Define your business-logic layer](tutorial/define-business-logic.md)
   2. [Define your schema](tutorial/define-the-schema.md)
   3. [Root queries and mutations](tutorial/root-queries-and-mutations.md)
   4. [Middleware](tutorial/middleware.md)
