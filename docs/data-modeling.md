@@ -107,7 +107,7 @@ class User {
 If a schema type declares that it has a certain relationship, but the class does not have an instance method with a matching name, Micrograph will always resolve that relationship as `null`.
 
 ### Overriding a relationship's output type
-Micrograph creates a `[Blog]` type automatically for `hasMany` relationships. You can override the output, however. You can do things like have Relay support:
+Micrograph creates a `[Blog]` type automatically for `hasMany` relationships. You can override the output, however. You can do things like have support Relay connections:
 
 ```js
 // schema.js
@@ -125,7 +125,7 @@ schema.defineType('user', {
 ...
 ```
 
-You can also transform the data in the schema without having to mess with your business-logic layer. So, if the `User` class's `blogs` method returns a normal array, you have an opportunity to transform it into the shape required by your `output` key:
+You can also transform the relationship data right in the schema without having to mess with your business-logic layer. So, if the `User` class's `blogs` method returns a normal array, you have an opportunity to transform it into the shape required by your `output` key:
 
 ```js
 // schema.js
@@ -164,4 +164,4 @@ schema.defineType('user', {
 ...
 ```
 
-Now, rather than the `blogs` relationship having the default `[Blog]` type, it's now a `BlogConnection` type. Check out [an example Relay app](https://github.com/dylnslck/micrograph/tree/master/example/relay).
+The `blogs` relationship is no longer a `[Blog]` type. It's now a `BlogConnection` type. Check out [an example Relay app](https://github.com/dylnslck/micrograph/tree/master/example/relay).

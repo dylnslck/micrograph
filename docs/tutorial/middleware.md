@@ -12,6 +12,7 @@ Middleware supports `before` and `after` hooks. The `before` hooks fire before t
 // middleware.js
 import { createMiddleware } from 'micrograph';
 import bcrypt from 'bcrypt';
+
 const middleware = createMiddleware();
 
 // fires before all queries and mutations

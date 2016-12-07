@@ -3,4 +3,10 @@
 Example Micrograph application using [nedb](https://github.com/louischatriot/nedb) as the persistence layer.
 
 ## Run
-Use a build tool like `babel` to transpile this folder. Or more simply run `babel-node index.js`.
+```
+git clone https://github.com/dylnslck/micrograph.git
+cd micrograph
+npm i
+npm i -g babel-cli
+babel-node example/basic
+```

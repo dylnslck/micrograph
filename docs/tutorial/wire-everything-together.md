@@ -14,7 +14,7 @@ import middleware from './middleware.js';
 // pretend database service used in previous examples
 import db from './db';
 
-const compiledSchema = compile(schema, queries, mutations, middleware);
+const compiledSchema = compile({ schema, queries, mutations, middleware });
 const app = express();
 
 app.use('/graphql', graphqlHTTP(request => ({
@@ -26,4 +26,4 @@ app.use('/graphql', graphqlHTTP(request => ({
 app.listen(4000);
 ```
 
-Then you can visit **http://localhost:4000//graphql** and view the generated schema.
+Then you can visit **http://localhost:4000/graphql** and view the generated schema.
