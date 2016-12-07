@@ -1,0 +1,523 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>1. Define your business-logic layer · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.2">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="define-the-schema.html" />
+    
+    
+    <link rel="prev" href="../tutorial.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../tutorial.html">
+            
+                <a href="../tutorial.html">
+            
+                    
+                    Tutorial
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter active" data-level="1.2.1" data-path="define-business-logic.html">
+            
+                <a href="define-business-logic.html">
+            
+                    
+                    1. Define your business-logic layer
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="define-the-schema.html">
+            
+                <a href="define-the-schema.html">
+            
+                    
+                    2. Define your schema
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="root-queries-and-mutations.html">
+            
+                <a href="root-queries-and-mutations.html">
+            
+                    
+                    3. Root queries and mutations
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.4" data-path="middleware.html">
+            
+                <a href="middleware.html">
+            
+                    
+                    4. Middleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.5" data-path="wire-everything-together.html">
+            
+                <a href="wire-everything-together.html">
+            
+                    
+                    5. Wire everything together
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../data-modeling.html">
+            
+                <a href="../data-modeling.html">
+            
+                    
+                    Data modeling
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../when-to-use.html">
+            
+                <a href="../when-to-use.html">
+            
+                    
+                    When to use Micrograph
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../api-reference.html">
+            
+                <a href="../api-reference.html">
+            
+                    
+                    API
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../api/compile.html">
+            
+                <a href="../api/compile.html">
+            
+                    
+                    compile
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../api/create-middleware.html">
+            
+                <a href="../api/create-middleware.html">
+            
+                    
+                    createMiddleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >1. Define your business-logic layer</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="define-your-business-logic-layer">Define your business logic layer</h1>
+<p>Micrograph is relatively un-opinionated in regards to your business logic layer. In most cases, Micrograph can simply hook into your existing logic without excessive coupling.</p>
+<p>For this tutorial, we&apos;re going to create two classes: <code>User</code> and <code>Blog</code> classes.</p>
+<h2 id="user"><code>User</code></h2>
+<pre><code class="lang-js"><span class="hljs-comment">// User.js</span>
+<span class="hljs-keyword">import</span> Blog <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./Blog&apos;</span>;
+
+<span class="hljs-comment">// pretend database service</span>
+<span class="hljs-keyword">import</span> db <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;../db&apos;</span>;
+
+<span class="hljs-comment">// pretend auth function</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkCanSee</span>(<span class="hljs-params">args, ctx</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
+  <span class="hljs-keyword">constructor</span>(data) {
+    <span class="hljs-keyword">this</span>.id = data.id;
+    <span class="hljs-keyword">this</span>.name = data.name;
+    <span class="hljs-keyword">this</span>.email = data.email;
+  }
+
+  <span class="hljs-comment">// factory function that performs basic auth (visibility)</span>
+  <span class="hljs-keyword">static</span> gen(args, ctx, data) {
+    <span class="hljs-keyword">return</span> checkCanSee(args, ctx) ? <span class="hljs-keyword">new</span> User(data) : <span class="hljs-literal">null</span>;
+  }
+
+  <span class="hljs-comment">// fetches a single user in the db</span>
+  <span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> findOne(args, ctx) {
+    <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> db.user.findOne(args.id);
+
+    <span class="hljs-keyword">if</span> (!data) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">return</span> User.gen(args, ctx, data);
+  }
+
+  <span class="hljs-comment">// fetches all users from the db</span>
+  <span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> findAll(args, ctx) {
+    <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> db.user.findAll();
+
+    <span class="hljs-keyword">if</span> (!data) <span class="hljs-keyword">return</span> [];
+    <span class="hljs-keyword">return</span> data.map(d =&gt; User.gen(args, ctx, d));
+  }
+
+  <span class="hljs-comment">// creates a user in the db</span>
+  <span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> create(args, ctx) {
+    <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> db.user.create(args.input);
+
+    <span class="hljs-keyword">if</span> (!data) <span class="hljs-keyword">return</span> [];
+    <span class="hljs-keyword">return</span> User.gen(args, ctx, data);
+  }
+
+  <span class="hljs-comment">// updates a user in the db</span>
+  <span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> update(args, ctx) {
+    <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> db.user.update(args.id, args.input);
+
+    <span class="hljs-keyword">if</span> (!data) <span class="hljs-keyword">return</span> [];
+    <span class="hljs-keyword">return</span> User.gen(args, ctx, data);
+  }
+
+  <span class="hljs-comment">// fetches the blogs that belong to a user instance</span>
+  blogs(args, ctx) {
+    <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> db.blog.findAll({ author: <span class="hljs-keyword">this</span>.id });
+
+    <span class="hljs-keyword">if</span> (!data) <span class="hljs-keyword">return</span> [];
+    <span class="hljs-keyword">return</span> data.map(d =&gt; Blog.gen(args, ctx, d));
+  }
+}
+</code></pre>
+<p>The above class is a unit of business-logic. The class structure is borrowed from Dan Schafer&apos;s talk regarding GraphQL at Facebook. Sashko Stubailo from the Apollo core team wrote <a href="https://dev-blog.apollodata.com/graphql-at-facebook-by-dan-schafer-38d65ef075af#.g59jmj7mk" target="_blank">an excellent overview</a>.</p>
+<p>The basic idea is that your models should be responsible for their own visibility and CRUD operations. You&apos;ll notice that the above class has virtually no coupling with Micrograph. The only caveat is that Micrograph expects your classes to have instance methods for resolving relationships, and it expects those methods to take in an <code>args</code> object as the first argument and a <code>ctx</code> object as the second argument. In Dan&apos;s talk, he says Facebook uses a <code>viewer</code> object in place of <code>ctx</code>, but the concept is the same. In your Micrograph application, you can create a universal <code>ctx</code> object that is passed around your business-logic layer. This object can include useful things, such as a JWT token that your models use to determine visibility.</p>
+<p>The static methods aren&apos;t required, but are certainly good practice because they ensure that any <code>user</code> instance that exists in your application has been properly authenticated. The number and structure of the static methods are left to the developer. As you&apos;ll see in a little, we&apos;ll use these static methods when defining Micrograph&apos;s root queries and mutations.</p>
+<h2 id="blog"><code>Blog</code></h2>
+<p>The <code>Blog</code> class has the same structure.</p>
+<pre><code class="lang-js"><span class="hljs-comment">// Blog.js</span>
+<span class="hljs-keyword">import</span> User <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./User&apos;</span>;
+
+<span class="hljs-comment">// pretend database service</span>
+<span class="hljs-keyword">import</span> db <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;../db&apos;</span>;
+
+<span class="hljs-comment">// pretend auth function</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkCanSee</span>(<span class="hljs-params">args, ctx</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Blog</span> </span>{
+  <span class="hljs-keyword">constructor</span>(data) {
+    <span class="hljs-keyword">this</span>.id = data.id;
+    <span class="hljs-keyword">this</span>.title = data.title;
+    <span class="hljs-keyword">this</span>.content = data.content;
+    <span class="hljs-keyword">this</span>.authorId = data.authorId;
+  }
+
+  <span class="hljs-comment">// factory function that performs basic auth (visibility)</span>
+  <span class="hljs-keyword">static</span> gen(args, ctx, data) {
+    <span class="hljs-keyword">return</span> checkCanSee(args, ctx) ? <span class="hljs-keyword">new</span> Blog(data) : <span class="hljs-literal">null</span>;
+  }
+
+  <span class="hljs-comment">// fetches a single user in the db</span>
+  <span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> findOne(args, ctx) {
+    <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> db.blog.findOne(args.id);
+
+    <span class="hljs-keyword">if</span> (!data) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">return</span> User.gen(args, ctx, data);
+  }
+
+  <span class="hljs-comment">// fetches all blogs from the db</span>
+  <span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> findAll(args, ctx) {
+    <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> db.blog.findAll();
+
+    <span class="hljs-keyword">if</span> (!data) <span class="hljs-keyword">return</span> [];
+    <span class="hljs-keyword">return</span> data.map(d =&gt; User.gen(args, ctx, d));
+  }
+
+  <span class="hljs-comment">// creates a blog in the db</span>
+  <span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> create(args, ctx) {
+    <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> db.blog.create(args.input);
+
+    <span class="hljs-keyword">if</span> (!data) <span class="hljs-keyword">return</span> [];
+    <span class="hljs-keyword">return</span> User.gen(args, ctx, data);
+  }
+
+  <span class="hljs-comment">// updates a blog in the db</span>
+  <span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> update(args, ctx) {
+    <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> db.blog.update(args.id, args.input);
+
+    <span class="hljs-keyword">if</span> (!data) <span class="hljs-keyword">return</span> [];
+    <span class="hljs-keyword">return</span> User.gen(args, ctx, data);
+  }
+
+  <span class="hljs-comment">// fetches the blog&apos;s author</span>
+  author(args, ctx) {
+    <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> db.blog.findOne(<span class="hljs-keyword">this</span>.authorId);
+
+    <span class="hljs-keyword">if</span> (!data) <span class="hljs-keyword">return</span> [];
+    <span class="hljs-keyword">return</span> User.gen(args, ctx, data);
+  }
+}
+</code></pre>
+<p>The above classes make up the entirety of our example app&apos;s business-logic layer. There is a decent amount of boilerplate among these two classes, but that&apos;s outside the scope of Micrograph. Remember, Micrograph only cares that your classes have instance methods that resolve relationships. The developer could very well create a base class that implements the static methods, as they&apos;re nearly identical. But, Micrograph aims to stay as far away from your business-logic layer as possible.</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="../tutorial.html" class="navigation navigation-prev " aria-label="Previous page: Tutorial">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="define-the-schema.html" class="navigation navigation-next " aria-label="Next page: 2. Define your schema">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"1. Define your business-logic layer","level":"1.2.1","depth":2,"next":{"title":"2. Define your schema","level":"1.2.2","depth":2,"path":"tutorial/define-the-schema.md","ref":"tutorial/define-the-schema.md","articles":[]},"previous":{"title":"Tutorial","level":"1.2","depth":1,"path":"tutorial.md","ref":"tutorial.md","articles":[{"title":"1. Define your business-logic layer","level":"1.2.1","depth":2,"path":"tutorial/define-business-logic.md","ref":"tutorial/define-business-logic.md","articles":[]},{"title":"2. Define your schema","level":"1.2.2","depth":2,"path":"tutorial/define-the-schema.md","ref":"tutorial/define-the-schema.md","articles":[]},{"title":"3. Root queries and mutations","level":"1.2.3","depth":2,"path":"tutorial/root-queries-and-mutations.md","ref":"tutorial/root-queries-and-mutations.md","articles":[]},{"title":"4. Middleware","level":"1.2.4","depth":2,"path":"tutorial/middleware.md","ref":"tutorial/middleware.md","articles":[]},{"title":"5. Wire everything together","level":"1.2.5","depth":2,"path":"tutorial/wire-everything-together.md","ref":"tutorial/wire-everything-together.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"tutorial/define-business-logic.md","mtime":"2016-12-07T04:00:05.000Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2016-12-07T19:05:39.616Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

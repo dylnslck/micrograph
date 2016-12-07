@@ -1,0 +1,519 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Data modeling · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.2">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="when-to-use.html" />
+    
+    
+    <link rel="prev" href="tutorial/wire-everything-together.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="tutorial.html">
+            
+                <a href="tutorial.html">
+            
+                    
+                    Tutorial
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="tutorial/define-business-logic.html">
+            
+                <a href="tutorial/define-business-logic.html">
+            
+                    
+                    1. Define your business-logic layer
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="tutorial/define-the-schema.html">
+            
+                <a href="tutorial/define-the-schema.html">
+            
+                    
+                    2. Define your schema
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="tutorial/root-queries-and-mutations.html">
+            
+                <a href="tutorial/root-queries-and-mutations.html">
+            
+                    
+                    3. Root queries and mutations
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.4" data-path="tutorial/middleware.html">
+            
+                <a href="tutorial/middleware.html">
+            
+                    
+                    4. Middleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.5" data-path="tutorial/wire-everything-together.html">
+            
+                <a href="tutorial/wire-everything-together.html">
+            
+                    
+                    5. Wire everything together
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.3" data-path="data-modeling.html">
+            
+                <a href="data-modeling.html">
+            
+                    
+                    Data modeling
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="when-to-use.html">
+            
+                <a href="when-to-use.html">
+            
+                    
+                    When to use Micrograph
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="api-reference.html">
+            
+                <a href="api-reference.html">
+            
+                    
+                    API
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="api/compile.html">
+            
+                <a href="api/compile.html">
+            
+                    
+                    compile
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="api/create-middleware.html">
+            
+                <a href="api/create-middleware.html">
+            
+                    
+                    createMiddleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >Data modeling</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="data-modeling">Data modeling</h1>
+<h2 id="cohere">Cohere</h2>
+<p>Micrograph uses <a href="https://github.com/directlyio/cohere" target="_blank">cohere</a> for modeling data.</p>
+<p><code>cohere</code> is a simple schema lib that is concerned with <strong>attributes</strong> and <strong>relationships</strong>. <code>cohere</code> supports &quot;bring-your-own-typing&quot; for attributes (such as GraphQL scalar types). Micrograph requires that you use GraphQL scalar types for attributes, but if you choose to use <code>cohere</code> for a different project, you can use arbitrary typing (or none at all).</p>
+<pre><code class="lang-sh">npm install --save cohere
+</code></pre>
+<h3 id="relationships">Relationships</h3>
+<p><code>cohere</code> is opiniated with relationships. It supports <strong>hasMany</strong>, <strong>belongsTo</strong>, and <strong>hasOne</strong>.</p>
+<h3 id="hasmanytype-inverse-options"><code>hasMany(type, inverse, options)</code></h3>
+<p>The <code>hasMany</code> relationship is used for <strong>M:1</strong> or <strong>M:N</strong> relationships. For example, a user might have many blogs. In another example, a teacher might have many students and vice versa.</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">import</span> { GraphQLString } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;graphql&apos;</span>;
+<span class="hljs-keyword">import</span> Schema, { hasMany, belongsTo, hasOne } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;cohere&apos;</span>;
+<span class="hljs-keyword">import</span> { Blog, User } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./models&apos;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">new</span> Schema()
+  .defineType(<span class="hljs-string">&apos;user&apos;</span>, {
+    attributes: {
+      name: GraphQLString,
+    },
+    relationships: {
+      blogs: hasMany(<span class="hljs-string">&apos;blog&apos;</span>, <span class="hljs-string">&apos;author&apos;</span>, {...}),
+    },
+    model: User,
+  })
+  .defineType(<span class="hljs-string">&apos;blog&apos;</span>, {
+    attributes: {
+      title: GraphQLString,
+    },
+    relationships: {
+      author: belongsTo(<span class="hljs-string">&apos;user&apos;</span>, <span class="hljs-string">&apos;blogs&apos;</span>, {...}),
+    },
+    model: Blog,
+  })
+  .compile();
+</code></pre>
+<p>For example, a GraphQL query might then look like:</p>
+<pre><code>query getUsersBlogs {
+  fetchUser(id: &quot;1&quot;) {
+    name
+    blogs {
+      id
+      title
+    }
+  }
+}
+
+query getBlogsAuthor {
+  fetchBlog(id: &quot;1&quot;) {
+    title
+    author {
+      name
+    }
+  }
+}
+</code></pre><h3 id="belongsto-vs-hasone">belongsTo vs. hasOne</h3>
+<p>Both <code>belongsTo</code> and <code>hasOne</code> are for modeling <strong>1:1</strong> and <strong>1:M</strong> relationships. In the example above, the <code>blog</code> type belongs to a <code>user</code> type via the <code>author</code> field.</p>
+<p>Micrograph will generate an <code>author</code> field on the <code>Blog</code> type that points to a <code>User</code> type.</p>
+<p>What&apos;s the difference between <code>belongsTo</code> and <code>hasOne</code>?</p>
+<p>Nothing, really. They both represent <strong>1:1</strong> relationships, and <code>cohere</code> includes both mainly for use by the database layer. For example, we typically use <code>belongsTo</code> on a piece of data that we consider to be <strong>dependent</strong>. In other words, the existence of a <code>blog</code> depends on the existence of a <code>user</code>. A blog cannot exist without an author. In contrast, a <code>user</code> might have a <code>company</code> relationship:</p>
+<pre><code class="lang-javascript">...
+relationships: {
+  blogs: ...,
+  company: hasOne(<span class="hljs-string">&apos;company&apos;</span>, <span class="hljs-string">&apos;employees&apos;</span>, {...}),
+},
+...
+</code></pre>
+<p>In this example, it doesn&apos;t make sense for a <code>user</code> to belong to a company because a user might be unemployed.</p>
+<p>Micrograph handles <code>belongsTo</code> and <code>hasOne</code> relationships identically, and their use cases are left to the developer. For example, you might use <code>belongsTo</code> or <code>hasOne</code> to specify which table has the foreign key, how cascade deletion works, or which NoSQL collection has an index.</p>
+<h3 id="resolving-relationships">Resolving relationships</h3>
+<p>Micrograph expects every model to have a corresponding instance method that matches the relationship&apos;s name. For example, if a user has many blogs, then the <code>User</code> class should have a <code>blogs</code> method.</p>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> db <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./database&apos;</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
+  <span class="hljs-keyword">constructor</span>(data) {
+    <span class="hljs-keyword">this</span>.id = data.id;
+    <span class="hljs-keyword">this</span>.name = data.name;
+    ...
+  }
+
+  blogs(args, ctx) {
+    <span class="hljs-keyword">return</span> db.blogs.find({ author: <span class="hljs-keyword">this</span>.id });
+  }
+}
+</code></pre>
+<p>If a schema type declares that it has a certain relationship, but the class does not have an instance method with a matching name, Micrograph will always resolve that relationship as <code>null</code>.</p>
+<h3 id="overriding-a-relationships-output-type">Overriding a relationship&apos;s output type</h3>
+<p>Micrograph creates a <code>[Blog]</code> type automatically for <code>hasMany</code> relationships. You can override the output, however. You can do things like have support Relay connections:</p>
+<pre><code class="lang-js"><span class="hljs-comment">// schema.js</span>
+...
+schema.defineType(<span class="hljs-string">&apos;user&apos;</span>, {
+  attributes: {
+    name: GraphQLString,
+  },
+  relationships: {
+    blogs: hasMany(<span class="hljs-string">&apos;blog&apos;</span>, <span class="hljs-string">&apos;author&apos;</span>, {
+      output: createConnectionType,
+    });
+  },
+});
+...
+</code></pre>
+<p>You can also transform the relationship data right in the schema without having to mess with your business-logic layer. So, if the <code>User</code> class&apos;s <code>blogs</code> method returns a normal array, you have an opportunity to transform it into the shape required by your <code>output</code> key:</p>
+<pre><code class="lang-js"><span class="hljs-comment">// schema.js</span>
+...
+schema.defineType(<span class="hljs-string">&apos;user&apos;</span>, {
+  attributes: {
+    name: GraphQLString,
+  },
+  relationships: {
+    blogs: hasMany(<span class="hljs-string">&apos;blog&apos;</span>, <span class="hljs-string">&apos;author&apos;</span>, {
+      output: createConnectionType,
+      transform: connectionFromArray,
+    });
+  },
+});
+...
+</code></pre>
+<p>Just like root queries and root mutations, you can specify <code>args</code> for each relationship:</p>
+<pre><code class="lang-js"><span class="hljs-comment">// schema.js</span>
+...
+schema.defineType(<span class="hljs-string">&apos;user&apos;</span>, {
+  attributes: {
+    name: GraphQLString,
+  },
+  relationships: {
+    blogs: hasMany(<span class="hljs-string">&apos;blog&apos;</span>, <span class="hljs-string">&apos;author&apos;</span>, {
+      output: createConnectionType,
+      transform: connectionFromArray,
+      args: connectionArgs,
+    });
+  },
+});
+...
+</code></pre>
+<p>The <code>blogs</code> relationship is no longer a <code>[Blog]</code> type. It&apos;s now a <code>BlogConnection</code> type. Check out <a href="https://github.com/dylnslck/micrograph/tree/master/example/relay" target="_blank">an example Relay app</a>.</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="tutorial/wire-everything-together.html" class="navigation navigation-prev " aria-label="Previous page: 5. Wire everything together">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="when-to-use.html" class="navigation navigation-next " aria-label="Next page: When to use Micrograph">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Data modeling","level":"1.3","depth":1,"next":{"title":"When to use Micrograph","level":"1.4","depth":1,"path":"when-to-use.md","ref":"when-to-use.md","articles":[]},"previous":{"title":"5. Wire everything together","level":"1.2.5","depth":2,"path":"tutorial/wire-everything-together.md","ref":"tutorial/wire-everything-together.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"data-modeling.md","mtime":"2016-12-07T04:04:49.000Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2016-12-07T19:05:39.616Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

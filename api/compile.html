@@ -1,0 +1,412 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>compile · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.2">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="create-middleware.html" />
+    
+    
+    <link rel="prev" href="../api-reference.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../tutorial.html">
+            
+                <a href="../tutorial.html">
+            
+                    
+                    Tutorial
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../tutorial/define-business-logic.html">
+            
+                <a href="../tutorial/define-business-logic.html">
+            
+                    
+                    1. Define your business-logic layer
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="../tutorial/define-the-schema.html">
+            
+                <a href="../tutorial/define-the-schema.html">
+            
+                    
+                    2. Define your schema
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="../tutorial/root-queries-and-mutations.html">
+            
+                <a href="../tutorial/root-queries-and-mutations.html">
+            
+                    
+                    3. Root queries and mutations
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.4" data-path="../tutorial/middleware.html">
+            
+                <a href="../tutorial/middleware.html">
+            
+                    
+                    4. Middleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.5" data-path="../tutorial/wire-everything-together.html">
+            
+                <a href="../tutorial/wire-everything-together.html">
+            
+                    
+                    5. Wire everything together
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../data-modeling.html">
+            
+                <a href="../data-modeling.html">
+            
+                    
+                    Data modeling
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../when-to-use.html">
+            
+                <a href="../when-to-use.html">
+            
+                    
+                    When to use Micrograph
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../api-reference.html">
+            
+                <a href="../api-reference.html">
+            
+                    
+                    API
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter active" data-level="1.5.1" data-path="compile.html">
+            
+                <a href="compile.html">
+            
+                    
+                    compile
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="create-middleware.html">
+            
+                <a href="create-middleware.html">
+            
+                    
+                    createMiddleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >compile</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="api">API</h1>
+<h3 id="compileschema-queries-mutations-middleware"><code>.compile(schema, queries, mutations, [middleware])</code></h3>
+<p>Micrograph&apos;s main export is <code>compile</code>. <code>compile</code> transforms:</p>
+<ol>
+<li>A <code>cohere</code> schema</li>
+<li>A queries mapping</li>
+<li>A mutations mapping</li>
+<li>Middleware</li>
+</ol>
+<p>into a <code>GraphQLSchema</code> that can be plugged into your favorite GraphQL server (<a href="https://github.com/graphql/express-graphql" target="_blank">express-graphql</a>, <a href="https://github.com/apollostack/graphql-server" target="_blank">graphql-server</a>, et al).</p>
+<pre><code class="lang-javascript"><span class="hljs-comment">// compiled.js</span>
+<span class="hljs-keyword">import</span> { compile } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;micrograph&apos;</span>;
+<span class="hljs-keyword">import</span> schema <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./schema&apos;</span>;
+<span class="hljs-keyword">import</span> queries <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./queries&apos;</span>;
+<span class="hljs-keyword">import</span> mutations <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./mutations&apos;</span>;
+<span class="hljs-keyword">import</span> middleware <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./middleware&apos;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> compile(schema, queries, mutations, middleware);
+</code></pre>
+<p>Then somewhere in your application:</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">import</span> express <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;express&apos;</span>;
+<span class="hljs-keyword">import</span> graphqlHTTP <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;express-graphql&apos;</span>;
+<span class="hljs-keyword">import</span> schema <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./compiled&apos;</span>;
+
+<span class="hljs-keyword">const</span> app = express();
+app.use(<span class="hljs-string">&apos;/graphql&apos;</span>, graphqlHTTP({ schema });
+app.listen(<span class="hljs-number">4000</span>);
+</code></pre>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="../api-reference.html" class="navigation navigation-prev " aria-label="Previous page: API">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="create-middleware.html" class="navigation navigation-next " aria-label="Next page: createMiddleware">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"compile","level":"1.5.1","depth":2,"next":{"title":"createMiddleware","level":"1.5.2","depth":2,"path":"api/create-middleware.md","ref":"api/create-middleware.md","articles":[]},"previous":{"title":"API","level":"1.5","depth":1,"path":"api-reference.md","ref":"api-reference.md","articles":[{"title":"compile","level":"1.5.1","depth":2,"path":"api/compile.md","ref":"api/compile.md","articles":[]},{"title":"createMiddleware","level":"1.5.2","depth":2,"path":"api/create-middleware.md","ref":"api/create-middleware.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"api/compile.md","mtime":"2016-11-22T17:30:35.000Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2016-12-07T19:05:39.616Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
