@@ -8,6 +8,7 @@
    * [4. Middleware](tutorial/middleware.md)
    * [5. Wire everything together](tutorial/wire-everything-together.md)
 * [Data modeling](data-modeling.md)
+* [When to use Micrograph](when-to-use.md)
 * [API](api-reference.md)
    * [compile](api/compile.md)
    * [createMiddleware](api/create-middleware.md)

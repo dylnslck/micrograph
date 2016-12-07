@@ -22,10 +22,12 @@ middleware.before('createUser', (args, ctx, next) {
 export default middleware;
 ```
 
-## The gist {#the-gist}
-Getting started with Micrograph requires the creation of two files: `schema.js` and `queries.js`. You can optionally create two more files: `mutations.js` and `middleware.js`. The [tutorial](tutorial.md) explains creating these files. Micrograph compiles these files into a `GraphQLSchema` that can be plugged into your favorite GraphQL server library. These files enable your application to grow by focusing on things that matter, such as middleware and schema types.
+Micrograph is still in **beta** and the API may change over time. I've used it in production, but I generally don't recommend it until the API completely stabilizes.
 
-For example, let's say your data model includes users and blogs. You'll [define your schema](tutorial/define-the-schema.md), [create some root queries and mutations](tutorial/root-queries-and-mutations.md), and specify some [middleware](tutorial/middleware.md). A week later, you decide to add more types to your data model. With Micrograph, you simply need to edit your `schema.js` and add some more middleware hooks if you choose.
+## The gist {#the-gist}
+Micrograph requires the creation of two files: `schema.js` and `queries.js`. You can optionally create two more files: `mutations.js` and `middleware.js`. The [tutorial](tutorial.md) explains creating these files. Micrograph compiles these files into a `GraphQLSchema` that can be plugged into your favorite GraphQL server library. These files enable your application to grow by focusing on things that matter, such as middleware and schema types.
+
+For example, let's say your data model includes users and blogs. You'll [define your schema](tutorial/define-the-schema.md), [create some root queries and mutations](tutorial/root-queries-and-mutations.md), and specify some [middleware](tutorial/middleware.md). A week later, you decide to add more types to your data model. With Micrograph, you simply need to edit your `schema.js` and add some more middleware hooks if you choose. You don't need to add more root queries or root mutations - Micrograph automatically takes care of that.
 
 ![](assets/graph.svg)
 
