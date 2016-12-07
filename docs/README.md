@@ -4,7 +4,7 @@
 
 Micrograph is a small (~375 LOC) library that makes developing large GraphQL applications with complex business logic pretty easy. Micrograph generalizes root queries and root mutations across every type in your data model. In other words, you can bootstrap a pretty large GraphQL application by writing a few functions. Afterwords, you can continue to add/modify types in your data model without adding and linking GraphQL-specific object types.
 
-Micrograph always supports middleware so that you can easily intercept queries and mutations:
+Micrograph supports middleware hooks so that you can easily intercept queries and mutations:
 
 ```js
 import { createMiddleware } from 'micrograph';
