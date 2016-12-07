@@ -8,6 +8,7 @@ The following is an example of a basic schema. Refer to the [data modeling](../d
 // schema.js
 import Schema, { hasMany, belongsTo } from 'cohere';
 import { GraphQLString, GraphQLNonNull, GraphQLList } from 'graphql';
+import { User, Blog } from './models';
 
 const schema = new Schema();
 

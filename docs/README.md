@@ -2,13 +2,10 @@
 # Micrograph
 ![](https://travis-ci.org/directlyio/micrograph.svg?branch=master) [![codecov](https://codecov.io/gh/directlyio/micrograph/branch/master/graph/badge.svg)](https://codecov.io/gh/directlyio/micrograph)
 
-Micrograph is a small (~375 LOC) middleware library that makes developing large GraphQL applications with complex business logic pretty easy. Micrograph utilizes type-to-query and type-to-mutation mappings that enable applications to scale without boilerplate and GraphQL bookkeeping.
-
-## Motivation {#motivation}
-Large GraphQL schemas quickly become cumbersome and hard to manage. Duplication invariably occurs across different GraphQL object types and creating and maintaining a [DRY](https://en.wikipedia.org/wiki/Don't_repeat_yourself) GraphQL codebase is rather difficult. Additionally, the GraphQL documentation doesn't cover complex middleware outside of basic Express authentication. Micrograph offers a structured way to build complex middleware and to handle business-logic specific errors.
+Micrograph is a small (~375 LOC) middleware library that makes developing large GraphQL applications with complex business logic pretty easy. Micrograph generalizes root queries and root mutations across every type in your data model. In other words, you can bootstrap a pretty large GraphQL application by writing a few functions. Afterwords, you can continue to add/modify types in your data model without adding and linking GraphQL-specific object types.
 
 ## The gist {#the-gist}
-Getting started with Micrograph requires the creation of two files: `schema.js` and `queries.js`. You can optionally create two more files: `mutations.js` and `middleware.js`. The [tutorial](tutorial.md) explains creating these files. Micrograph compiles these four files into a `GraphQLSchema` that can be plugged into your favorite GraphQL server library. These files enable your application to grow by focusing on things that matter, such as middleware and additional schema types.
+Getting started with Micrograph requires the creation of two files: `schema.js` and `queries.js`. You can optionally create two more files: `mutations.js` and `middleware.js`. The [tutorial](tutorial.md) explains creating these files. Micrograph compiles these files into a `GraphQLSchema` that can be plugged into your favorite GraphQL server library. These files enable your application to grow by focusing on things that matter, such as middleware and schema types.
 
 For example, let's say your data model includes users and blogs. You'll [define your schema](tutorial/define-the-schema.md), [create some root queries and mutations](tutorial/root-queries-and-mutations.md), and specify some [middleware](tutorial/middleware.md). A week later, you decide to add more types to your data model. With Micrograph, you simply need to edit your `schema.js` and add some more middleware hooks if you choose.
 
@@ -27,10 +24,11 @@ Now, we need to define the schema, queries, mutations, and middleware. These ste
 
 ## Documentation {#documentation}
 1. [Tutorial](tutorial.md)
-  1. [Define your schema](tutorial/define-the-schema.md)
-  2. [Root queries and mutations](tutorial/root-queries-and-mutations.md)
-  3. [Middleware](tutorial/middleware.md)
-  4. [Wire everything together](tutorial/wire-everything-together.md)
+  1. [Define your business-logic layer](tutorial/define-business-logic.html)
+  2. [Define your schema](tutorial/define-the-schema.md)
+  3. [Root queries and mutations](tutorial/root-queries-and-mutations.md)
+  4. [Middleware](tutorial/middleware.md)
+  5. [Wire everything together](tutorial/wire-everything-together.md)
 2. [Data modeling](data-modeling.md)
 3. [API](api-reference.md)
   1. [compile](api/compile.md)
