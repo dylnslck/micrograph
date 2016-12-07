@@ -1,6 +1,6 @@
 import { GraphQLString } from 'graphql';
 import Schema, { hasMany, belongsTo } from 'cohere';
-import { Blog, User } from './models';
+import { Blog, User } from '../models';
 
 export default new Schema()
   .defineType('blog', {

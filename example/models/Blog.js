@@ -20,7 +20,7 @@ export default class Blog {
     return new Promise((resolve, reject) => {
       ctx.db.blog.findOne({ _id: args.id }, (err, doc) => {
         if (err) return reject(err);
-        return Blog.gen(args, ctx, doc);
+        return resolve(Blog.gen(args, ctx, doc));
       });
     });
   }

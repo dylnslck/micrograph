@@ -3,8 +3,8 @@ import express from 'express';
 import graphqlHTTP from 'express-graphql';
 import queries from './queries';
 import mutations from './mutations';
-import middleware from './middleware';
 import schema from './schema';
+import middleware from '../middleware';
 import { compile } from '../../src';
 
 const app = express();

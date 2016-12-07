@@ -38,7 +38,7 @@ export default (type) => ({
           .then(data => (ctx.data = data));
       },
 
-      finalize(ctx) {
+      finalize(args, ctx) {
         return ctx.data;
       },
 

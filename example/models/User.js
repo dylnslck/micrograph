@@ -1,53 +1,55 @@
-import User from './User';
+import Blog from './Blog';
 
 function checkCanSee() {
   return true;
 }
 
-export default class Blog {
+export default class User {
   constructor(data) {
     this.id = data._id; // eslint-disable-line
-    this.title = data.title;
-    this.content = data.content;
-    this.authorId = data.author;
+    this.name = data.name;
+    this.email = data.email;
   }
 
   static gen(args, ctx, data) {
-    return checkCanSee(args, ctx, data) ? new Blog(data) : null;
+    return checkCanSee(ctx, args, data) ? new User(data) : null;
   }
 
   static findOne(args, ctx) {
     return new Promise((resolve, reject) => {
-      ctx.db.blog.findOne({ _id: args.id }, (err, doc) => {
+      ctx.db.user.findOne({ _id: args.id }, (err, doc) => {
         if (err) return reject(err);
-        return Blog.gen(args, ctx, doc);
+        return resolve(User.gen(args, ctx, doc));
       });
     });
   }
 
   static find(args, ctx) {
     return new Promise((resolve, reject) => {
-      ctx.db.blog.find({}, (err, docs) => {
-        if (err) return reject(err);
+      ctx.db.user.find({}, (err, docs) => {
+        if (err) {
+          reject(err);
+          return null;
+        }
 
         if (!docs) return [];
-        return resolve(docs.map(doc => Blog.gen(args, ctx, doc)));
+        return resolve(docs.map(user => User.gen(args, ctx, user)));
       });
     });
   }
 
   static insert(args, ctx) {
     return new Promise((resolve, reject) => {
-      ctx.db.blog.insert(args.input, (err, doc) => {
+      ctx.db.user.insert(args.input, (err, doc) => {
         if (err) return reject(err);
-        return resolve(Blog.gen(args, ctx, doc));
+        return resolve(User.gen(args, ctx, doc));
       });
     });
   }
 
   static update(args, ctx) {
     return new Promise((resolve, reject) => {
-      ctx.db.blog.update({ _id: args.id }, { $set: args.input }, (err, numUpdated) => {
+      ctx.db.user.update({ _id: args.id }, { $set: args.input }, (err, numUpdated) => {
         if (err) return reject(err);
         return resolve(numUpdated);
       });
@@ -56,18 +58,18 @@ export default class Blog {
 
   static remove(args, ctx) {
     return new Promise((resolve, reject) => {
-      ctx.db.blog.remove({ _id: args.id }, (err, numRemoved) => {
+      ctx.db.user.remove({ _id: args.id }, (err, numRemoved) => {
         if (err) return reject(err);
         return resolve(numRemoved);
       });
     });
   }
 
-  author(args, ctx) {
+  blogs(args, ctx) {
     return new Promise((resolve, reject) => {
-      ctx.db.user.findOne({ _id: this.authorId }, (err, doc) => {
+      ctx.db.blog.find({ author: this.id }, (err, docs) => {
         if (err) return reject(err);
-        return resolve(User.gen(args, ctx, doc));
+        return resolve(docs.map(doc => Blog.gen(args, ctx, doc)));
       });
     });
   }

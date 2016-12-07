@@ -1,8 +1,8 @@
 import { GraphQLString } from 'graphql';
 import { connectionArgs, connectionFromArray } from 'graphql-relay';
 import Schema, { hasMany, belongsTo } from 'cohere';
-import { Blog, User } from './models';
 import createConnectionType from './createConnectionType';
+import { Blog, User } from '../models';
 
 export default new Schema()
   .defineType('blog', {
