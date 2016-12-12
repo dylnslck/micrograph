@@ -1296,9 +1296,9 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-cohere@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/cohere/-/cohere-1.0.6.tgz#14c9cd7c27f7a44ceee406b666979a556142be3f"
+cohere@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/cohere/-/cohere-1.1.0.tgz#79cd162ab8cf001d66cefecfe0db549890c97963"
 
 columnify@~1.5.4:
   version "1.5.4"
