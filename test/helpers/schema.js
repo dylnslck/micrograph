@@ -5,8 +5,8 @@ import { Blog, User } from './models';
 export default new Schema()
   .defineType('user', {
     attributes: {
-      name: GraphQLString,
-      email: GraphQLString,
+      name: { type: GraphQLString },
+      email: { type: GraphQLString },
     },
     relationships: {
       blogs: hasMany('blog', 'author', {
@@ -19,8 +19,8 @@ export default new Schema()
   })
   .defineType('blog', {
     attributes: {
-      title: GraphQLString,
-      content: GraphQLString,
+      title: { type: GraphQLString },
+      content: { type: GraphQLString },
     },
     relationships: {
       author: belongsTo('user', 'blogs'),

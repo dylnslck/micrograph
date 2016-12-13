@@ -15,7 +15,7 @@ const creationInputType = (type) => {
 
   const attributeFields = attributes.reduce((prev, { field, type: attrType }) => ({
     ...prev,
-    [field]: { type: attrType },
+    [field]: { type: attrType.type },
   }), {});
 
   const relationshipFields = relationships.reduce((prev, relationship) => {
