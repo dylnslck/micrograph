@@ -15,8 +15,8 @@ const schema = new Schema();
 
 schema.defineType('user', {
   attributes: {
-    name: GraphQLString,
-    email: new GraphQLNonNull(GraphQLString),
+    name: { type: GraphQLString },
+    email: { type: new GraphQLNonNull(GraphQLString) },
   },
   relationships: {
     blogs: hasMany('blog', 'author'),
@@ -26,7 +26,7 @@ schema.defineType('user', {
 
 schema.defineType('blog', {
   attributes: {
-    title: GraphQLString,    
+    title: { type: GraphQLString },
   },
   relationships: {
     author: belongsTo('user', 'blogs'),

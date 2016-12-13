@@ -23,7 +23,7 @@ import { Blog, User } from './models';
 export default new Schema()
   .defineType('user', {
     attributes: {
-      name: GraphQLString,
+      name: { type: GraphQLString },
     },
     relationships: {
       blogs: hasMany('blog', 'author', {...}),
@@ -32,7 +32,7 @@ export default new Schema()
   })
   .defineType('blog', {
     attributes: {
-      title: GraphQLString,
+      title: { type: GraphQLString },
     },
     relationships: {
       author: belongsTo('user', 'blogs', {...}),
@@ -132,7 +132,7 @@ You can also transform the relationship data right in the schema without having 
 ...
 schema.defineType('user', {
   attributes: {
-    name: GraphQLString,
+    name: { type: GraphQLString },
   },
   relationships: {
     blogs: hasMany('blog', 'author', {
@@ -151,7 +151,7 @@ Just like root queries and root mutations, you can specify `args` for each relat
 ...
 schema.defineType('user', {
   attributes: {
-    name: GraphQLString,
+    name: { type: GraphQLString },
   },
   relationships: {
     blogs: hasMany('blog', 'author', {

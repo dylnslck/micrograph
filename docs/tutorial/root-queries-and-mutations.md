@@ -59,9 +59,9 @@ const createInputObject = (type) => {
   const inputObject = new GraphQLInputObjectType({
     // BlogInput and UserInput
     name: `${titleize(type.name)}Input`,
-    fields: () => type.attributes.reduce((accumulator, { field, type }) => ({
+    fields: () => type.attributes.reduce((accumulator, { field, type: attrType }) => ({
       ...accumulator,
-      [field]: { type },
+      [field]: { type: attrType.type },
     }), {}),
   });
 
