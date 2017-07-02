@@ -2,22 +2,22 @@ import { createMiddleware } from '../src';
 
 const middleware = createMiddleware();
 
-middleware.before((args, ctx, next) => {
+middleware.before((args, ctx, ast, next) => {
   ctx.startTime = Date.now();
   next();
 });
 
-middleware.before('create*', (args, ctx, next) => {
+middleware.before('create*', (args, ctx, ast, next) => {
   console.log('About to create something!');
   next();
 });
 
-middleware.before('createUser', (args, ctx, next) => {
+middleware.before('createUser', (args, ctx, ast, next) => {
   console.log('About to create a user!');
   next();
 });
 
-middleware.after((args, ctx, next) => {
+middleware.after((args, ctx, ast, next) => {
   console.log('Duration:', Date.now() - ctx.startTime);
   next();
 });
