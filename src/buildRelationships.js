@@ -39,24 +39,24 @@ export default (type, objectTypes) => {
       [field]: {
         args,
         type: outputType,
-        resolve(parent, fieldArgs, ctx) {
+        resolve(parent, fieldArgs, ctx, ast) {
           if (!parent) return null;
           const fieldResolver = parent[field];
 
           if (typeof fieldResolver !== 'function') return fieldResolver;
 
-          const results = parent[field](fieldArgs, ctx);
+          const results = parent[field](fieldArgs, ctx, ast);
 
           if (results && typeof results.then === 'function') {
             return results.then(data => (
               transform && typeof transform === 'function'
-                ? transform(data, fieldArgs, ctx)
+                ? transform(data, fieldArgs, ctx, ast)
                 : results
             ));
           }
 
           return transform && typeof transform === 'function'
-            ? transform(results, fieldArgs, ctx)
+            ? transform(results, fieldArgs, ctx, ast)
             : results;
         },
       },

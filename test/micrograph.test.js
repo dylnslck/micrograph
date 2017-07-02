@@ -10,7 +10,7 @@ import { compile, createMiddleware } from '../src';
 let middlewareCount = 0;
 const middleware = createMiddleware();
 
-const incrementCount = (args, ctx, next) => {
+const incrementCount = (args, ctx, ast, next) => {
   middlewareCount++;
   next();
 };

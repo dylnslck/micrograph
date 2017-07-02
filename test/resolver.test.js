@@ -2,9 +2,10 @@ import test from 'ava';
 import { createMiddleware } from '../src';
 import createResolver from '../src/resolver';
 
-const argsAreValid = (t, args, ctx, next) => {
+const argsAreValid = (t, args, ctx, ast, next) => {
   t.is(typeof args, 'object');
   t.is(typeof ctx, 'object');
+  t.is(typeof ast, 'object');
   t.is(typeof next, 'function');
 };
 
@@ -30,8 +31,8 @@ test('should fail to create a resolver with invalid args', t => {
 
 test('should run asnyc/sync middleware in order with valid patterns', async t => {
   const userResolver = createResolver('createUser', {
-    resolve(args, ctx, next) {
-      argsAreValid(t, args, ctx, next);
+    resolve(args, ctx, ast, next) {
+      argsAreValid(t, args, ctx, ast, next);
 
       setTimeout(() => {
         ctx.alphabetical += 'e';
@@ -42,8 +43,8 @@ test('should run asnyc/sync middleware in order with valid patterns', async t =>
 
   const middleware = createMiddleware();
 
-  middleware.before((args, ctx, next) => {
-    argsAreValid(t, args, ctx, next);
+  middleware.before((args, ctx, ast, next) => {
+    argsAreValid(t, args, ctx, ast, next);
 
     setTimeout(() => {
       ctx.alphabetical += 'a';
@@ -51,8 +52,8 @@ test('should run asnyc/sync middleware in order with valid patterns', async t =>
     }, 50);
   });
 
-  middleware.before('*', (args, ctx, next) => {
-    argsAreValid(t, args, ctx, next);
+  middleware.before('*', (args, ctx, ast, next) => {
+    argsAreValid(t, args, ctx, ast, next);
 
     return new Promise(resolve => {
       setTimeout(() => {
@@ -62,38 +63,38 @@ test('should run asnyc/sync middleware in order with valid patterns', async t =>
     });
   });
 
-  middleware.before('invalid*', (args, ctx, next) => {
-    argsAreValid(t, args, ctx, next);
+  middleware.before('invalid*', (args, ctx, ast, next) => {
+    argsAreValid(t, args, ctx, ast, next);
     ctx.alphabetical += 'invalid';
     next();
   });
 
-  middleware.before('create*', (args, ctx, next) => {
-    argsAreValid(t, args, ctx, next);
+  middleware.before('create*', (args, ctx, ast, next) => {
+    argsAreValid(t, args, ctx, ast, next);
     ctx.alphabetical += 'c';
     next();
   });
 
-  middleware.before('createUser', (args, ctx, next) => {
-    argsAreValid(t, args, ctx, next);
+  middleware.before('createUser', (args, ctx, ast, next) => {
+    argsAreValid(t, args, ctx, ast, next);
     ctx.alphabetical += 'd';
     next();
   });
 
-  middleware.after('createUser', (args, ctx, next) => {
-    argsAreValid(t, args, ctx, next);
+  middleware.after('createUser', (args, ctx, ast, next) => {
+    argsAreValid(t, args, ctx, ast, next);
     ctx.alphabetical += 'f';
     next();
   });
 
-  middleware.after('create*', (args, ctx, next) => {
-    argsAreValid(t, args, ctx, next);
+  middleware.after('create*', (args, ctx, ast, next) => {
+    argsAreValid(t, args, ctx, ast, next);
     ctx.alphabetical += 'g';
     next();
   });
 
-  middleware.after('*', (args, ctx, next) => {
-    argsAreValid(t, args, ctx, next);
+  middleware.after('*', (args, ctx, ast, next) => {
+    argsAreValid(t, args, ctx, ast, next);
     ctx.alphabetical += 'h';
     next();
   });
@@ -101,8 +102,9 @@ test('should run asnyc/sync middleware in order with valid patterns', async t =>
   await new Promise((resolve, reject) => {
     const args = {};
     const ctx = { alphabetical: '' };
+    const ast = {};
 
-    userResolver.handle(middleware.stack, args, ctx, resolve, reject);
+    userResolver.handle(middleware.stack, args, ctx, ast, resolve, reject);
   }).then(({ finalCtx }) => {
     t.is(finalCtx.alphabetical, 'abcdefgh');
   });
@@ -112,35 +114,36 @@ test('should handle an error', async t => {
   let shouldBeTrue;
 
   const userResolver = createResolver('createUser', {
-    resolve(args, ctx, next) {
-      argsAreValid(t, args, ctx, next);
+    resolve(args, ctx, ast, next) {
+      argsAreValid(t, args, ctx, ast, next);
       next();
     },
   });
 
   const middleware = createMiddleware();
 
-  middleware.before((args, ctx, next) => {
-    argsAreValid(t, args, ctx, next);
+  middleware.before((args, ctx, ast, next) => {
+    argsAreValid(t, args, ctx, ast, next);
     shouldBeTrue = true;
     next();
   });
 
-  middleware.before((args, ctx, next) => {
-    argsAreValid(t, args, ctx, next);
+  middleware.before((args, ctx, ast, next) => {
+    argsAreValid(t, args, ctx, ast, next);
     throw new Error('Oh no!');
   });
 
-  middleware.before((args, ctx, next) => {
-    argsAreValid(t, args, ctx, next);
+  middleware.before((args, ctx, ast, next) => {
+    argsAreValid(t, args, ctx, ast, next);
     shouldBeTrue = false;
   });
 
   await new Promise((resolve, reject) => {
     const args = {};
     const ctx = {};
+    const ast = {};
 
-    userResolver.handle(middleware.stack, args, ctx, resolve, reject);
+    userResolver.handle(middleware.stack, args, ctx, ast, resolve, reject);
   }).then(() => {
     t.fail();
   }).catch(err => {
@@ -153,22 +156,22 @@ test('should handle an async error', async t => {
   let shouldBeTrue;
 
   const userResolver = createResolver('createUser', {
-    resolve(args, ctx, next) {
-      argsAreValid(t, args, ctx, next);
+    resolve(args, ctx, ast, next) {
+      argsAreValid(t, args, ctx, ast, next);
       next();
     },
   });
 
   const middleware = createMiddleware();
 
-  middleware.before((args, ctx, next) => {
-    argsAreValid(t, args, ctx, next);
+  middleware.before((args, ctx, ast, next) => {
+    argsAreValid(t, args, ctx, ast, next);
     shouldBeTrue = true;
     next();
   });
 
-  middleware.before((args, ctx, next) => {
-    argsAreValid(t, args, ctx, next);
+  middleware.before((args, ctx, ast, next) => {
+    argsAreValid(t, args, ctx, ast, next);
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         reject(new Error('Oh no!'));
@@ -176,16 +179,17 @@ test('should handle an async error', async t => {
     });
   });
 
-  middleware.before((args, ctx, next) => {
-    argsAreValid(t, args, ctx, next);
+  middleware.before((args, ctx, ast, next) => {
+    argsAreValid(t, args, ctx, ast, next);
     shouldBeTrue = false;
   });
 
   await new Promise((resolve, reject) => {
     const args = {};
     const ctx = {};
+    const ast = {};
 
-    userResolver.handle(middleware.stack, args, ctx, resolve, reject);
+    userResolver.handle(middleware.stack, args, ctx, ast, resolve, reject);
   }).then(() => {
     t.fail();
   }).catch(err => {

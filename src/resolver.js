@@ -8,12 +8,12 @@ const doesPatternMatch = (pattern, name) => {
   );
 };
 
-const call = (fn, args, ctx, next, bail) => {
+const call = (fn, args, ctx, ast, next, bail) => {
   try {
-    const called = fn(args, ctx, () => next(args, ctx));
+    const called = fn(args, ctx, ast, () => next(args, ctx, ast));
 
     if (called && typeof called.then === 'function') {
-      called.then(() => next(args, ctx)).catch(bail);
+      called.then(() => next(args, ctx, ast)).catch(bail);
     }
   } catch (err) {
     bail(err);
@@ -47,7 +47,7 @@ class Resolver {
     };
   }
 
-  handle(stack, args, ctx, done, bail) {
+  handle(stack, args, ctx, ast, done, bail) {
     const { before, after } = this.filterStack(stack);
     const layers = [
       ...before,
@@ -57,7 +57,7 @@ class Resolver {
 
     let index = 0;
 
-    const next = (mutableArgs, mutableCtx) => {
+    const next = (mutableArgs, mutableCtx, requestAst) => {
       const layer = layers[index++];
 
       if (!layer) {
@@ -65,10 +65,10 @@ class Resolver {
         return;
       }
 
-      call(layer.fn, mutableArgs, mutableCtx, next, bail);
+      call(layer.fn, mutableArgs, mutableCtx, requestAst, next, bail);
     };
 
-    next({ ...args }, { ...ctx });
+    next({ ...args }, { ...ctx }, ast);
   }
 }
 

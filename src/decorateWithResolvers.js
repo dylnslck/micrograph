@@ -28,7 +28,7 @@ export default (queriesOrMutations, middleware, types, name) =>
         description,
         args,
         type: outputType,
-        resolve(root, mutableArgs, mutableCtx) {
+        resolve(root, mutableArgs, mutableCtx, ast) {
           const { resolve, finalize, error } = actions;
 
           if (resolve && typeof resolve !== 'function') {
@@ -38,7 +38,7 @@ export default (queriesOrMutations, middleware, types, name) =>
           }
 
           const resolver = createResolver(key, { resolve, finalize, error });
-          return handleResolver(mutableArgs, mutableCtx, resolver, middleware);
+          return handleResolver(mutableArgs, mutableCtx, ast, resolver, middleware);
         },
       },
     };
